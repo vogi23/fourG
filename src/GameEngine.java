@@ -8,5 +8,7 @@
  * @author lueq
  */
 public class GameEngine {
+    public GameEngine(){
     
+    }
 }
