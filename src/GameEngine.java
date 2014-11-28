@@ -8,5 +8,11 @@
  * @author lueq
  */
 public class GameEngine {
+    private final String user;
+
+    public GameEngine(String user) {
+        this.user = user;
+    }
+    
     
 }
