@@ -13,6 +13,4 @@ public class GameEngine {
     public GameEngine(String user) {
         this.user = user;
     }
-    
-    
 }
