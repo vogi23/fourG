@@ -23,7 +23,7 @@ public class DiscoverServer implements Runnable{
     
     private Thread thread = null;
     
-    private final int port = 4241;
+    private final int port = 4240;
     private DatagramSocket socket;
     
     private boolean stopFlag = false;
@@ -35,7 +35,7 @@ public class DiscoverServer implements Runnable{
     @Override
     public void run(){
         
-         System.out.println("UDP DiscoverServer started");
+         System.out.println("DiscoverServer started");
          try{
             socket = new DatagramSocket(port, InetAddress.getByName("0.0.0.0"));
             socket.setBroadcast(true);
@@ -48,8 +48,8 @@ public class DiscoverServer implements Runnable{
                 String message = new String(packet.getData()).trim();
                 
                 System.out.println("DiscoverServer Packet received! "+message);
-                if(message.equals("DISCOVER_FOURG_SERVER")){
-                    byte[] sendBuf = "DISCOVER_FOURG_SERVER_RESPONSE".getBytes();
+                if(message.equals("DISCOVER_FOURG_ENEMY")){
+                    byte[] sendBuf = "FOURG_ENEMY_HELLO".getBytes();
                     DatagramPacket sendpacket = new DatagramPacket(sendBuf, sendBuf.length, packet.getAddress(), packet.getPort());
                     socket.send(sendpacket);
                     System.out.println("DiscoverServer Packet beantwortet");

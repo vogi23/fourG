@@ -19,6 +19,6 @@ public class TestGameServer {
     public static void main(String[] args){
         
         MgmtController mgmt = new MgmtController();
-        mgmt.initOnlineGame();
+        mgmt.initCreateOnlineGame();
     }
 }

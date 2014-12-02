@@ -18,10 +18,14 @@ public class LocalEnemy extends Enemy implements IEnemy{
     public LocalEnemy(GameModel gamemodel, GameController gamecontroller){
         super(gamemodel, gamecontroller);
         
+        // init KI etc.
+        
+        // when ready call:
+        //gameC.enemyReady();
     }
     
     /**
-     * Send Move to KI
+     * Send Move to KI for processing and reacting
      * 
      * @param m 
      */
@@ -29,7 +33,6 @@ public class LocalEnemy extends Enemy implements IEnemy{
     public void receiveMove(Move m) {
         
         // Move already processed by local GameModel. KI can access directly local GameModel and react with a move
-        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -8,7 +8,7 @@ package fourG.model;
 
 /**
  *
- * @author tgdvoch5
+ * @author vogi23
  */
 public enum ModelState {
     Home,                   // StartBildschirm

@@ -12,7 +12,7 @@ import fourG.model.IGameModelInformations;
 
 /**
  *
- * @author tgdvoch5
+ * @author vogi23
  */
 public class Enemy {
     protected IGameModelInformations gameM;

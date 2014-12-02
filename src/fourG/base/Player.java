@@ -11,7 +11,6 @@ package fourG.base;
  * @author vogi23
  */
 public enum Player {
-    None,
     Red,
     Blue
 }

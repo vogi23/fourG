@@ -7,9 +7,7 @@ import fourG.base.RemoteEnemy;
 import fourG.model.GameModel;
 import fourG.model.ModelState;
 import fourG.view.GameView;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.io.File;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,65 +21,78 @@ import java.net.InetAddress;
  */
 public class MgmtController {
     
+    private GameModel gameM;
     private GameController gameC;
     private GameView gameV;
     
-    private JoinServer server;
-    
     public MgmtController(){
+        
+        // Create Controller
         this.gameC = new GameController();
+        
+        // Create Model
+        gameM = new GameModel(ModelState.Home);
+        this.gameC.setModel(gameM);
+        
+        // Create View
         this.gameV = new GameView(this, this.gameC);
-        
+        gameM.addModelObserver(this.gameV);
     }
     
-    public void initLoadedGame(){
-        // Set My Color
-        gameC.setMyColer(Player.Red);
-        
+    /**
+     * Load a saved game.
+     * 
+     * Usually called from the GameView
+     */
+    public void initLoadedGame(File f){
+        //...
     }
     
+    
+    /**
+     * Start a local game against the computer
+     * 
+     * Usually called from the GameView
+     */
     public void initLocalGame(){
-        // Set My Color
-        gameC.setMyColer(Player.Red);
-
-        // Create GameModel
-        GameModel g = new GameModel(ModelState.PreparingEnemy);
-        g.addModelObserver(this.gameV);
-        gameC.setModel(g);
+        
+        gameM.setState(ModelState.PreparingEnemy);
         
         // Create Enemy
-        gameC.setEnemy(new LocalEnemy(g,this.gameC));
+        gameC.setEnemy(new LocalEnemy(this.gameM,this.gameC));
     }
     
-    public void initOnlineGame(){
-        // Set My Color
-        gameC.setMyColer(Player.Red);
+    /**
+     * Create a game and wait for remote users to join you
+     * 
+     * Usually called from the GameView
+     */
+    public void initCreateOnlineGame(){
         
-        // Create GameModel
-        GameModel g = new GameModel(ModelState.WaitingForRemoteJoin);
-        g.addModelObserver(this.gameV);
-        gameC.setModel(g);
+        gameM.setState(ModelState.WaitingForRemoteJoin);
         
         // Create Enemy
-        RemoteEnemy e = new RemoteEnemy(g,this.gameC);
+        RemoteEnemy e = new RemoteEnemy(this.gameM,this.gameC);
         gameC.setEnemy(e);
-        e.listenUDP();
-        e.listenTCP();
+        e.listenForDiscoveryRequests();
+        e.listenForJoiningRequests();
     }
     
-    public void searchOnlineGame(){
-        // Set My Color
-        gameC.setMyColer(Player.Blue);
-        System.out.println("starting");
+    /**
+     * Look for games online and join them
+     * 
+     * Usually called from the GameView
+     */
+    public void initJoinOnlineGame(){
         
-        // Create GameModel
-        GameModel g = new GameModel(ModelState.SearchOnlineGames);
-        g.addModelObserver(this.gameV);
-        gameC.setModel(g);
+        // Set my color to Blue (Enemy will start with first move)
+        gameC.setMyColor(Player.Blue);
+        
+        gameM.setState(ModelState.SearchOnlineGames);
         
         // Create Enemy
-        RemoteEnemy e = new RemoteEnemy(g,this.gameC);
+        RemoteEnemy e = new RemoteEnemy(this.gameM,this.gameC);
         gameC.setEnemy(e);
-        e.searchEnemys();
+        e.discoverEnemysOnNetwork();
     }
 }

@@ -44,10 +44,11 @@ public class JoinServer implements Runnable{
                 
                 System.out.println("JoinServer: received "+msg);
                 
-                String response = "NOGO";
-                if(msg.equals("GO")){
-                    response = "GO";
+                String response = "NO_FUCK_YOU";
+                if(msg.equals("CAN_I_PLAY")){
+                    response = "YES_LETS_PLAY_ON_PORT_4242";
                     enemyFound = true;
+                    e.enemyFound(client.getInetAddress());
                 }
                 System.out.println("JoinServer: Antwort "+response);
                 out.println(response);

@@ -21,7 +21,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     
     private IGameModelModifications model;
     private IEnemy enemy;
-    private Player iAm = Player.None;         // Color (Player identification) of this Application
+    private Player iAm = Player.Red;         // Color (Player identification) of this Application
     
     public GameController(){
         
@@ -37,7 +37,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         this.enemy = e;
     }
     
-    public void setMyColer(Player color){
+    public void setMyColor(Player color){
         iAm = color;
     }
     
@@ -46,7 +46,6 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     }
     
     private void startGame(){
-        
         model.setState(ModelState.Playing);
     }
     
@@ -95,23 +94,20 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     @Override
     public void offerGame(GameOffer o){
         //model.addGameOffer(o);
-        joinGame(o);
+        joinGame(o); // auto join first GameOffer for TESTING! Normally joinGame would be called from GameView;
     }
 
     @Override
-    public void searchEnemys() {
+    public void reDiscoverEnemys() {
         if(RemoteEnemy.class.isInstance(enemy)){
-            ((RemoteEnemy) enemy).searchEnemys();
+            ((RemoteEnemy) enemy).discoverEnemysOnNetwork();
         }
     }
 
     @Override
     public void joinGame(GameOffer o) {
-        System.out.println("join Game");
         if(RemoteEnemy.class.isInstance(enemy)){
-        System.out.println("join Game2");
-            ((RemoteEnemy) enemy).connect(o);
+            ((RemoteEnemy) enemy).connectToOnlineGame(o);
         }
     }
-    
 }

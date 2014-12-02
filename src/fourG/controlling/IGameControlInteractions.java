@@ -16,6 +16,6 @@ import fourG.model.GameOffer;
 public interface IGameControlInteractions {
     
     public boolean makeMove(Move m);
-    public void searchEnemys();
+    public void reDiscoverEnemys();
     public void joinGame(GameOffer o);
 }

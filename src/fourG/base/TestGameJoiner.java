@@ -19,7 +19,7 @@ public class TestGameJoiner {
     public static void main(String[] args){
         
         MgmtController mgmt = new MgmtController();
-        mgmt.searchOnlineGame();
+        mgmt.initJoinOnlineGame();
         
     }
 }
