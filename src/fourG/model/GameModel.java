@@ -17,20 +17,96 @@ import java.util.ArrayList;
  */
 public class GameModel implements IGameModelModifications, IGameModelInformations {
     
-    private transient ArrayList<IModelObserver> observers;
+    //private transient ArrayList<IModelObserver> observers;
+
+    private Player [][] myPlayField;
+    private Player nextPlayer;
+    private Player currentPlayer;
+    private int row;            //Zeile, waagerecht
+    private int colum;          //Spalte senkrecht
+    private int yCurrent;
+    private int xCurrent;
+    private final int winValue=4;
     
-    public GameModel(int width, int height){
-        observers = new ArrayList();
+    public GameModel(){
+        this(6,7,Player.Red);
+    }
+    
+    public GameModel(int pWidth,int pHeight,Player pFirstPlayer){
+        //observers = new ArrayList
+        row=pWidth;
+        colum=pHeight;
+        myPlayField=new Player[row][colum];
+        nextPlayer=pFirstPlayer;
+        //init Array
+        for(int i=0;i<pWidth;i++){
+            for(int j=0;j<pHeight;j++){
+                myPlayField[i][j]=Player.None;
+            }
+        }
     }
     
     @Override
     public boolean processMove(Move m) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //returnVar, true if move is valid
+        //Validate Move
+        if(m==null){                                        //MoveObject empty
+            return false;           
+        }
+        if(m.getPlayer()!=nextPlayer){                   //wrong Player
+            return false;
+        }
+        if(myPlayField[m.getRow()][colum-1]!=Player.None){  //Field used
+            return false;
+        }
+        //-----Move is valid----
+        //Get y Position (colum)
+        int counter=0;
+        while(myPlayField[m.getRow()][counter]!=Player.None){
+            counter++;
+        }
+        xCurrent=m.getRow();
+        yCurrent=counter;
+        //insert Disc
+        myPlayField[xCurrent][yCurrent]=m.getPlayer();
+        //change Member
+        //ADD CODE HERE, change other Members like counter
+        if(m.getPlayer()==Player.Red){
+            nextPlayer=Player.Blue;
+            currentPlayer=Player.Red;
+        }
+        else{
+            nextPlayer=Player.Red;
+            currentPlayer=Player.Blue;
+        }
+        return true;    
     }
 
     @Override
     public boolean isGameover() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //false not Gameover
+        //check y
+        if(yCurrent>winValue-1){
+            int counter=0;
+            while(counter<winValue && myPlayField[xCurrent][yCurrent-counter]==currentPlayer){
+                counter++;
+            }
+            if(counter>=winValue){
+                return true;        //y Win
+            }
+        }
+        
+        //check x
+           /* if(yCurrent>winValue-1){
+            int leftCounter=0;
+            while(counter<winValue && myPlayField[xCurrent][yCurrent-counter]==currentPlayer){
+                counter++;
+            }
+            if(counter>=winValue){
+                return true;        //y Win
+            
+        }*/
+        return false;
     }
 
     @Override
@@ -47,12 +123,17 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         
     }
     
+    
     /**
      * Informiert alle IModelObservers (bsp. GameView), dass das GameModel geupdated wurde.
      */
-    private void broadcastUpdate(){
+   /* private void broadcastUpdate(){
         for(IModelObserver o : observers){
             o.update();
         }
     }
+    */
+    /*private void insertDisc(Player pPlayer){
+        
+    }*/
 }
