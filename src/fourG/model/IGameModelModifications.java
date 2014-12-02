@@ -14,5 +14,7 @@ import fourG.base.Move;
  */
 public interface IGameModelModifications extends IGameModelInformations{
     public boolean processMove(Move m);
+    public void setState(ModelState s);
+    public void addGameOffer(GameOffer o);
     
 }

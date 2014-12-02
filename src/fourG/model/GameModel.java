@@ -18,33 +18,56 @@ import java.util.ArrayList;
 public class GameModel implements IGameModelModifications, IGameModelInformations {
     
     private transient ArrayList<IModelObserver> observers;
+    private ModelState state;
     
-    public GameModel(int width, int height){
+    private int width = 5;
+    private int height = 4;
+    
+    public GameModel(ModelState s){
         observers = new ArrayList();
+        state = s;
     }
+    
+    public void setWidth(int i){
+        width = i;
+    }
+    public void setHeight(int i){
+        height = i;
+    }
+            
     
     @Override
     public boolean processMove(Move m) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.3"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean isGameover() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.4"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Player getWinner() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.5"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Player getCurrentPlayer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.6"); //To change body of generated methods, choose Tools | Templates.
     }
     
     public void addModelObserver(IModelObserver obs){
         
+    }
+    
+    @Override
+    public void addGameOffer(GameOffer o) {
+        throw new UnsupportedOperationException("Not supported yet.7"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setState(ModelState s) {
+        state = s;
     }
     
     /**

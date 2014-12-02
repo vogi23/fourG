@@ -6,7 +6,7 @@
 
 package fourG.base;
 
-import fourG.controlling.IGameControlInteractions;
+import fourG.controlling.IGameControlUpdates;
 import fourG.model.GameModel;
 import fourG.model.IGameModelInformations;
 
@@ -16,9 +16,9 @@ import fourG.model.IGameModelInformations;
  */
 public class Enemy {
     protected IGameModelInformations gameM;
-    protected IGameControlInteractions gameC;
+    protected IGameControlUpdates gameC;
     
-    public Enemy(IGameModelInformations gamemodel, IGameControlInteractions gamecontroller){
+    public Enemy(IGameModelInformations gamemodel, IGameControlUpdates gamecontroller){
         this.gameM = gamemodel;
         this.gameC = gamecontroller;
     }

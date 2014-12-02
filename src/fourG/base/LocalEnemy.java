@@ -2,7 +2,6 @@ package fourG.base;
 
 import fourG.controlling.GameController;
 import fourG.model.GameModel;
-import fourG.model.IGameModelInformations;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

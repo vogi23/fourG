@@ -14,7 +14,7 @@ import fourG.view.GameView;
  *
  * @author vogi23
  */
-public class Game {
+public class TestGameServer {
     
     public static void main(String[] args){
         
