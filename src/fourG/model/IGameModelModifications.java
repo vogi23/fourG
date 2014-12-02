@@ -12,6 +12,7 @@ import fourG.base.Move;
  *
  * @author tgdvoch5
  */
-public interface IGameModelModifications {
+public interface IGameModelModifications extends IGameModelInformations{
     public boolean processMove(Move m);
+    
 }
