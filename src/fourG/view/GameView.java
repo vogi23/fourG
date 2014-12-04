@@ -25,7 +25,9 @@ public class GameView extends JFrame implements IModelObserver {
     private MgmtController mgmt;
     private GameController game;
     private IGameModelInformations model;
-
+    
+    private int numberOfRows = 8;
+    
     JFrame gui;
     JPanel informationPanel = new JPanel();
     JLabel yourName = new JLabel();
@@ -33,8 +35,7 @@ public class GameView extends JFrame implements IModelObserver {
     JLabel yourIP = new JLabel();
     JLabel opponentIP = new JLabel();
     JPanel gamePanel = new JPanel();
-    JButton button = new JButton();
-
+    JLabel fourGInterface = new JLabel(); // für Darstellung des Interfaces, Mouse-Event
     
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
@@ -45,8 +46,8 @@ public class GameView extends JFrame implements IModelObserver {
     JMenuItem menuFileLoadLocal = new JMenuItem("Load Local Game");
     JMenuItem menuFileExit = new JMenuItem("Exit");
     JMenu menuOptions = new JMenu("Options");
-    JMenuItem setOptions = new JManuItem("Set Options");
-            
+    JMenuItem setOptions = new JMenuItem("Set Options");
+        
             
     public GameView(MgmtController mgmt, GameController game, IGameModelInformations model){
         super("fourG");
@@ -132,11 +133,22 @@ public class GameView extends JFrame implements IModelObserver {
         informationPanel.add(opponentName);
         informationPanel.add(opponentIP);
         add(gamePanel);
-        gamePanel.add(button);
+        gamePanel.add(fourGInterface);
+        fourGInterface.addMouseListener(
+                new MouseListener(){
+                     @Override
+                     public void mouseClicked(MouseEvent e){
+                         fourGAction();
+                     }
+                });
     }
     
     private void onFileExit() {
         System.exit(10);
+    }
+    
+    private int fourGAction(){
+        return getX();
     }
     
     @Override
