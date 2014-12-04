@@ -5,6 +5,7 @@ import fourG.controlling.MgmtController;
 import fourG.controlling.GameController;
 import fourG.model.IGameModelInformations;
 import fourG.model.IModelObserver;
+import java.awt.GridLayout;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
@@ -25,6 +26,15 @@ public class GameView extends JFrame implements IModelObserver {
     private GameController game;
     private IGameModelInformations model;
 
+    JFrame gui;
+    JPanel informationPanel = new JPanel();
+    JLabel yourName = new JLabel();
+    JLabel opponentName = new JLabel();
+    JLabel yourIP = new JLabel();
+    JLabel opponentIP = new JLabel();
+    JPanel gamePanel = new JPanel();
+    JButton button = new JButton();
+
     
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
@@ -34,7 +44,10 @@ public class GameView extends JFrame implements IModelObserver {
     JMenuItem menuFileSave = new JMenuItem("Save Game");
     JMenuItem menuFileLoadLocal = new JMenuItem("Load Local Game");
     JMenuItem menuFileExit = new JMenuItem("Exit");
-    
+    JMenu menuOptions = new JMenu("Options");
+    JMenuItem setOptions = new JManuItem("Set Options");
+            
+            
     public GameView(MgmtController mgmt, GameController game, IGameModelInformations model){
         super("fourG");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -43,9 +56,11 @@ public class GameView extends JFrame implements IModelObserver {
         this.game = game;
         this.model = model;
         
+        createMenu();
+        createInterface();
         pack();
         setVisible(true);
-        createMenu();
+        
     }
     
     private void createMenu(){
@@ -102,8 +117,22 @@ public class GameView extends JFrame implements IModelObserver {
                         onFileExit();
                     }
                 });
+        menuOptions.add(setOptions);
         menuBar.add(menuFile);
+        menuBar.add(menuOptions);
         setJMenuBar(menuBar);
+    }
+
+    private void createInterface(){
+        setLayout(new GridLayout(1, 2));
+        add(informationPanel);
+        informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.PAGE_AXIS));
+        informationPanel.add(yourName);
+        informationPanel.add(yourIP);
+        informationPanel.add(opponentName);
+        informationPanel.add(opponentIP);
+        add(gamePanel);
+        gamePanel.add(button);
     }
     
     private void onFileExit() {
@@ -112,7 +141,7 @@ public class GameView extends JFrame implements IModelObserver {
     
     @Override
     public void update() {
-       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
