@@ -31,7 +31,7 @@ public class MgmtController {
         this.gameC = new GameController();
         
         // Create Model
-        gameM = new GameModel(ModelState.Home);
+        gameM = new GameModel();
         this.gameC.setModel(gameM);
         
         // Create View
