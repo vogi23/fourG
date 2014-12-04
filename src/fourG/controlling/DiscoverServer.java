@@ -44,6 +44,7 @@ public class DiscoverServer implements Runnable{
             while(!stopFlag){
                 byte[] recvBuf = new byte[15000];
                 DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
+                System.out.println("DiscoverServer waiting for packets");
                 socket.receive(packet);
                 
                 String message = new String(packet.getData()).trim();
