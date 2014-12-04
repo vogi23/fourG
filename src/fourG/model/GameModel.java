@@ -25,8 +25,11 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     private int height = 4;
     private GameBoard board;
     
+    private ArrayList<GameOffer> gameoffers;
+    
     public GameModel(ModelState s){
         observers = new HashSet<IModelObserver>();
+        gameoffers = new ArrayList<GameOffer>();
         state = s;
     }
     
@@ -74,24 +77,36 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     
     @Override
     public void addGameOffer(GameOffer o) {
-        throw new UnsupportedOperationException("Not supported yet.7"); //To change body of generated methods, choose Tools | Templates.
+        if(o == null){
+            return;
+        }
+        gameoffers.add(o);
+        broadcastUpdate();
     }
+    
     @Override
     public void clearGameOffers() {
-        throw new UnsupportedOperationException("Not supported yet.7"); //To change body of generated methods, choose Tools | Templates.
+        gameoffers.clear();
+        broadcastUpdate();
     }
+    
     @Override
     public ArrayList<GameOffer> getGameOffers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return gameoffers;
     }
 
     @Override
-    public ModelState getModelState() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ModelState getState() {
+        return state;
     }
     @Override
     public void setState(ModelState s) {
+        if(state == s){
+            // State did NOT change
+            return;
+        }
         state = s;
+        broadcastUpdate();
     }
     
     /**

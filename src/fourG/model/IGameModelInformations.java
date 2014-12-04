@@ -18,7 +18,7 @@ public interface IGameModelInformations {
     public boolean isGameover();
     public Player getWinner();
     public Player getCurrentPlayer();
-    public ModelState getModelState();
+    public ModelState getState();
     public ArrayList<GameOffer> getGameOffers();
     public Move getLastMove();
     public GameBoard getBoard();

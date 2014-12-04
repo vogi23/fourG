@@ -13,7 +13,7 @@ import fourG.model.GameModel;
  *
  * @author vogi23
  */
-public class LocalEnemy extends Enemy implements IEnemy{
+public class LocalEnemy extends Enemy {
    
     public LocalEnemy(GameModel gamemodel, GameController gamecontroller){
         super(gamemodel, gamecontroller);

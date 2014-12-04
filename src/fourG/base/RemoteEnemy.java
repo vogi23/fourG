@@ -24,7 +24,7 @@ import java.net.Socket;
  *
  * @author vogi23
  */
-public class RemoteEnemy extends Enemy implements IEnemy {
+public class RemoteEnemy extends Enemy {
     
     private DiscoverServer dserver;
     private JoinServer jserver;

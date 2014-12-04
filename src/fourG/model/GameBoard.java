@@ -22,12 +22,18 @@ public class GameBoard {
         this.height = height;
     }
     
-    public void setCell(int x, int y){
+    public void setCell(int x, int y, Player color){
         
     }
     
-    public Player getCell(){
-        
-        return Player.None;
+    public Player getCell(int x, int y){
+        throw new UnsupportedOperationException("GameBoard.getCell not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public int getWidth(){
+        return width;
+    }
+    public int getHeight(){
+        return height;
     }
 }
