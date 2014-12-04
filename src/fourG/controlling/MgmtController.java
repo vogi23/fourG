@@ -95,4 +95,8 @@ public class MgmtController {
         gameC.setEnemy(e);
         e.discoverEnemysOnNetwork();
     }
+    
+    public void initSaveGame(){
+        //...
+    }
 }
