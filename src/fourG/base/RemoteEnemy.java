@@ -12,7 +12,10 @@ import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
+import java.util.Enumeration;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -55,32 +58,56 @@ public class RemoteEnemy extends Enemy {
      * View will display avaiable GameOffers in GameModel
      */
     public void discoverEnemysOnNetwork(){
-        try(DatagramSocket client = new DatagramSocket()) {
+        try{
+            DatagramSocket client = new DatagramSocket();
             client.setBroadcast(true);
             
             byte[] outData = "DISCOVER_FOURG_ENEMY".getBytes();
+            
+           
+            
+             // Broadcast the message over all the network interfaces
+            Enumeration interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+              NetworkInterface networkInterface = (NetworkInterface) interfaces.nextElement();
 
-            try {
-                DatagramPacket sendPacket = new DatagramPacket(outData, outData.length, InetAddress.getByName("255.255.255.255"), enemyDiscoverPort);
-                client.send(sendPacket);
-                System.out.println("JOINER Enemy-Discovery-Packet sent to: 255.255.255.255:"+enemyDiscoverPort);
+              if (networkInterface.isLoopback() || !networkInterface.isUp()) {
+                    continue; // Don't want to broadcast to the loopback interface
+              }
 
-            } catch (Exception e) {
-                 System.err.println(e.getMessage());
+              for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+                InetAddress broadcast = interfaceAddress.getBroadcast();
+                if (broadcast == null) {
+                  continue;
+                }
+
+                // Send the broadcast package!
+                try {
+                  DatagramPacket sendPacket = new DatagramPacket(outData, outData.length, broadcast, enemyDiscoverPort);
+                  client.send(sendPacket);
+                } catch (Exception e) {
+                    System.err.println("remoteenemy.java "+e.getMessage());
+                }
+                
+                System.out.println("JOINER Enemy-Discovery-Packet sent to: " + broadcast.getHostAddress() + ":" + enemyDiscoverPort+ "; Interface: " + networkInterface.getDisplayName());
+              }
             }
             
-            // Receive response
-            byte[] recvBuf = new byte[15000];
-            DatagramPacket receivePacket = new DatagramPacket(recvBuf, recvBuf.length);
-            client.receive(receivePacket);
-            System.out.println("JOINER Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
             
-            // Filter Message
-            String message = new String(receivePacket.getData()).trim();
-            System.out.println("JOINER Broadcast response content: "+message);
-            if (message.equals("FOURG_ENEMY_HELLO")) {
-                // Add to available JoinServers List
-                gameC.offerGame(new GameOffer(receivePacket.getAddress(), enemyJoinPort));
+            // Receive response
+            while(true){
+                byte[] recvBuf = new byte[15000];
+                DatagramPacket receivePacket = new DatagramPacket(recvBuf, recvBuf.length);
+                client.receive(receivePacket);
+                System.out.println("JOINER Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
+
+                // Filter Message
+                String message = new String(receivePacket.getData()).trim();
+                System.out.println("JOINER Broadcast response content: "+message);
+                if (message.equals("FOURG_ENEMY_HELLO")) {
+                    // Add to available JoinServers List
+                    //gameC.offerGame(new GameOffer(receivePacket.getAddress(), enemyJoinPort));
+                }
             }
         }catch(Exception e){
             System.err.println(e.getMessage());
@@ -124,18 +151,22 @@ public class RemoteEnemy extends Enemy {
      */
     public void connectToOnlineGame(GameOffer o){
         // Online searching Connect to Remote. Then call gamecontroller.enemyReady();
-        enemyAddr = o.getAddress();
         
         System.out.println("JOINER try to connect to online game");
-        try(Socket client = new Socket(enemyAddr, 4241)){
+        try(Socket client = new Socket(o.getAddress(), 4241)){
             PrintWriter out = new PrintWriter(client.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out.println("CAN_I_PLAY");
             out.flush();
             String line = in.readLine();
             System.out.println("JOINER connection status: "+line);
-            System.out.println("JOINER enemyReady!");
-            gameC.enemyReady();
+            if(line.equals("YES_LETS_PLAY_ON_PORT_4242")){
+                enemyAddr = o.getAddress();
+                gameC.enemyReady();
+                System.out.println("JOINER enemyReady!");
+            }else{
+                System.out.println("JOINER Server refused my join!");
+            }
         }catch(IOException ex){
             System.out.println("JOINER connection status: Server not avaiable anymore");
         
