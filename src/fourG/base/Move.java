@@ -14,25 +14,13 @@ import fourG.base.Player;
  */
 public class Move {
     
-    private int row;
-    private Player player;
-    private int playerCount;
+    private int column;
             
-    public Move(int row, Player player, int count){
-        this.row = row;
-        this.player = player;
-        this.playerCount = count;
+    public Move(int col){
+        this.column = column;
     }
     
-    public int getRow(){
-        return this.row;
-    }
-    
-    public Player getPlayer(){
-        return this.player;
-    }
-    
-    public int getPlayerCount(){
-        return this.playerCount;
+    public int getColumn(){
+        return this.column;
     }
 }
