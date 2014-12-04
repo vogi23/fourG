@@ -35,7 +35,7 @@ public class MgmtController {
         this.gameC.setModel(gameM);
         
         // Create View
-        this.gameV = new GameView(this, this.gameC);
+        this.gameV = new GameView(this, this.gameC, gameM);
         gameM.addModelObserver(this.gameV);
     }
     
