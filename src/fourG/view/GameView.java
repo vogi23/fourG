@@ -3,6 +3,7 @@ package fourG.view;
 
 import fourG.controlling.MgmtController;
 import fourG.controlling.GameController;
+import fourG.model.GameModel;
 import fourG.model.IModelObserver;
 import javax.swing.JFrame;
 
@@ -20,10 +21,12 @@ public class GameView extends JFrame implements IModelObserver {
     
     private MgmtController mgmt;
     private GameController game;
+    private GameModel model;
     
-    public GameView(MgmtController mgmt, GameController game){
+    public GameView(MgmtController mgmt, GameController game, GameModel model){
         this.mgmt = mgmt;
         this.game = game;
+        this.model = model;
     }
     
     @Override
