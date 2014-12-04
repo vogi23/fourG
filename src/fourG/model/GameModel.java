@@ -21,29 +21,80 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     private transient HashSet<IModelObserver> observers;
     private ModelState state;
     
-    private int width = 5;
-    private int height = 4;
-    private GameBoard board;
+    private Player [][] myPlayField;
+    private Player nextPlayer;
+    private Player currentPlayer;
+    private int row;            //Zeile, waagerecht
+    private int colum;          //Spalte senkrecht
+    private int yCurrent;
+    private int xCurrent;
+    private final int winValue=4;
+    //private GameBoard board;                  //CHANGE it
+    private ArrayList<GameOffer> gameoffers;    //CHECK it
     
-    private ArrayList<GameOffer> gameoffers;
-    
-    public GameModel(ModelState s){
+    public GameModel(){
+        this(6,7,Player.Red);
+    }
+    public GameModel(int pWidth,int pHeight,Player pFirstPlayer){
+        //observers = new ArrayList
+        row=pWidth;
+        colum=pHeight;
+        myPlayField=new Player[row][colum];
+        nextPlayer=pFirstPlayer;
+        //init Array
+        for(int i=0;i<pWidth;i++){
+            for(int j=0;j<pHeight;j++){
+                myPlayField[i][j]=Player.None;
+            }
+        }
+        
         observers = new HashSet<IModelObserver>();
         gameoffers = new ArrayList<GameOffer>();
-        state = s;
+        state = ModelState.Playing;                          //CHECK it
     }
     
-    public void setWidth(int i){
+    /*public void setWidth(int i){
         width = i;
     }
     public void setHeight(int i){
         height = i;
-    }
+    }*/
             
     
     @Override
     public boolean processMove(Move m) {
-        throw new UnsupportedOperationException("Not supported yet.3"); //To change body of generated methods, choose Tools | Templates.
+        //returnVar, true if move is valid
+        //Validate Move
+        if(m==null){                                        //MoveObject empty
+            return false;           
+        }
+        if(m.getPlayer()!=nextPlayer){                   //wrong Player
+            return false;
+        }
+        if(myPlayField[m.getRow()][colum-1]!=Player.None){  //Field used
+            return false;
+        }
+        //-----Move is valid----
+        //Get y Position (colum)
+        int counter=0;
+        while(myPlayField[m.getRow()][counter]!=Player.None){
+            counter++;
+        }
+        xCurrent=m.getRow();
+        yCurrent=counter;
+        //insert Disc
+        myPlayField[xCurrent][yCurrent]=m.getPlayer();
+        //change Member
+        //ADD CODE HERE, change other Members like counter
+        if(m.getPlayer()==Player.Red){
+            nextPlayer=Player.Blue;
+            currentPlayer=Player.Red;
+        }
+        else{
+            nextPlayer=Player.Red;
+            currentPlayer=Player.Blue;
+        }
+        return true;    
     }
 
     @Override
@@ -56,9 +107,50 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    @Override
+@Override
     public boolean isGameover() {
-        return state == ModelState.GameOver;
+        //false not Gameover
+        int counter=0;
+        int counterDown=1;
+        //check y
+        if(yCurrent>=winValue){
+            while(counter<winValue && myPlayField[xCurrent][yCurrent-counterDown]==currentPlayer){
+                counterDown++;
+                counter++;
+            }
+            if(counter>=winValue){
+                return true;        //y Win
+            }
+        }
+        
+        //check x
+        counter=0;
+        int counterLeft=1;
+        int counterRight=1;
+        while(counterLeft<winValue && 0<=xCurrent-counterLeft && myPlayField[xCurrent-counterLeft][yCurrent]==currentPlayer){
+                counterLeft++;
+        }
+        counter=counterLeft-1;
+        while(counter<winValue && row<xCurrent+counterRight && myPlayField[xCurrent+counterRight][yCurrent]==currentPlayer){
+                counterRight++;
+                counter++;
+        }
+        if(counter>=winValue){
+                return true;        //x Win
+        }
+        
+        //check x
+           /* if(yCurrent>winValue-1){
+            int leftCounter=0;
+            while(counter<winValue && myPlayField[xCurrent][yCurrent-counter]==currentPlayer){
+                counter++;
+            }
+            if(counter>=winValue){
+                return true;        //y Win
+            
+        }*/
+        state=ModelState.GameOver;         //CHECK IT
+        return false;
     }
 
     @Override
@@ -68,7 +160,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
 
     @Override
     public Player getCurrentPlayer() {
-        throw new UnsupportedOperationException("Not supported yet.6"); //To change body of generated methods, choose Tools | Templates.
+        return currentPlayer;
     }
     
     public void addModelObserver(IModelObserver obs){
