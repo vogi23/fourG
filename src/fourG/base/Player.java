@@ -12,5 +12,6 @@ package fourG.base;
  */
 public enum Player {
     Red,
-    Blue
+    Blue,
+    None
 }

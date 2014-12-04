@@ -14,7 +14,7 @@ import fourG.model.IGameModelInformations;
  *
  * @author vogi23
  */
-public class Enemy {
+public abstract class Enemy implements IEnemy {
     protected IGameModelInformations gameM;
     protected IGameControlUpdates gameC;
     
@@ -22,4 +22,7 @@ public class Enemy {
         this.gameM = gamemodel;
         this.gameC = gamecontroller;
     }
+    
+    @Override
+    public abstract void receiveMove(Move m);
 }

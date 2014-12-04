@@ -4,6 +4,7 @@ package fourG.model;
 import fourG.base.Player;
 import fourG.base.Move;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,14 +18,15 @@ import java.util.ArrayList;
  */
 public class GameModel implements IGameModelModifications, IGameModelInformations {
     
-    private transient ArrayList<IModelObserver> observers;
+    private transient HashSet<IModelObserver> observers;
     private ModelState state;
     
     private int width = 5;
     private int height = 4;
+    private GameBoard board;
     
     public GameModel(ModelState s){
-        observers = new ArrayList();
+        observers = new HashSet<IModelObserver>();
         state = s;
     }
     
@@ -42,8 +44,18 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     }
 
     @Override
+    public Move getLastMove() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public GameBoard getBoard() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
     public boolean isGameover() {
-        throw new UnsupportedOperationException("Not supported yet.4"); //To change body of generated methods, choose Tools | Templates.
+        return state == ModelState.GameOver;
     }
 
     @Override
@@ -57,21 +69,33 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     }
     
     public void addModelObserver(IModelObserver obs){
-        
+        observers.add(obs);
     }
     
     @Override
     public void addGameOffer(GameOffer o) {
         throw new UnsupportedOperationException("Not supported yet.7"); //To change body of generated methods, choose Tools | Templates.
     }
+    @Override
+    public void clearGameOffers() {
+        throw new UnsupportedOperationException("Not supported yet.7"); //To change body of generated methods, choose Tools | Templates.
+    }
+    @Override
+    public ArrayList<GameOffer> getGameOffers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
+    @Override
+    public ModelState getModelState() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     @Override
     public void setState(ModelState s) {
         state = s;
     }
     
     /**
-     * Informiert alle IModelObservers (bsp. GameView), dass das GameModel geupdated wurde.
+     * Informiert alle IModelObservers (bsp. GameView), dass das GameModel aktualisiert wurde.
      */
     private void broadcastUpdate(){
         for(IModelObserver o : observers){
