@@ -15,12 +15,22 @@ import fourG.base.Player;
 public class Move {
     
     private int column;
+    private Player player;
             
     public Move(int col){
         this.column = column;
+        this.player = player;
     }
     
     public int getColumn(){
         return this.column;
+    }
+    
+    public void setPlayer(Player p){
+        player = p;
+    }
+    
+    public Player getPlayer(){
+        return player;
     }
 }
