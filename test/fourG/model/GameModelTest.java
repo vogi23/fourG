@@ -39,15 +39,12 @@ public class GameModelTest {
 
             
             checkMove(myGame,mR);
-            checkWinner(myGame);
+            checkWinner(myGame,false);
             checkMove(myGame,mB);
-            checkWinner(myGame);
-            /*result = myGame.processMove(mB);
-            assertEquals(expResult, result);
-            if(expResult!=result){
-                fail("Move Blue konnte nicht eingefühgt werden");
-            }*/
+            checkWinner(myGame,false);
         }
+        checkMove(myGame,mR);
+        checkWinner(myGame,true);
     }
     
     public void checkMove(GameModel myGame, Move m){
@@ -60,8 +57,7 @@ public class GameModelTest {
         
     }
     
-    public void checkWinner(GameModel myGame){
-        boolean expResult=false;
+    public void checkWinner(GameModel myGame,boolean expResult){
         boolean result= myGame.isGameover();
         assertEquals(expResult, result);
         if(expResult!=result){
