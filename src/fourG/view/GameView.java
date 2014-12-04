@@ -45,7 +45,7 @@ public class GameView extends JFrame implements IModelObserver {
     JMenuItem menuFileLoadLocal = new JMenuItem("Load Local Game");
     JMenuItem menuFileExit = new JMenuItem("Exit");
     JMenu menuOptions = new JMenu("Options");
-    JMenuItem setOptions = new JManuItem("Set Options");
+    JMenuItem setOptions = new JMenuItem("Set Options");
             
             
     public GameView(MgmtController mgmt, GameController game, IGameModelInformations model){
