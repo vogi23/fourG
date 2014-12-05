@@ -108,12 +108,12 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         int counter=0;
         int counterDown=1;
         //check y
-        if(yCurrent>=winValue){
-            while(counter<winValue && gameBoard.getCell(xCurrent,yCurrent-counterDown)==currentPlayer){
+        if(yCurrent>=winValue-1){
+            while(counter<winValue-1 && gameBoard.getCell(xCurrent,yCurrent-counterDown)==currentPlayer){
                 counterDown++;
                 counter++;
             }
-            if(counter>=winValue){
+            if(counter>=winValue-1){
                 return true;        //y Win
             }
         }
@@ -122,11 +122,11 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         counter=0;
         int counterLeft=1;
         int counterRight=1;
-        while(counter<winValue && 0<=xCurrent-counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent)==currentPlayer){
+        while(counter<winValue-1 && 0<=xCurrent-counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent)==currentPlayer){
                 counterLeft++;
                 counter++;
         }
-        while(counter<winValue && row<xCurrent+counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent)==currentPlayer){
+        while(counter<winValue-1 && row>xCurrent+counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent)==currentPlayer){
                 counterRight++;
                 counter++;
         }
