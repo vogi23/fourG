@@ -106,7 +106,7 @@ public class RemoteEnemy extends Enemy {
                 System.out.println("JOINER Broadcast response content: "+message);
                 if (message.equals("FOURG_ENEMY_HELLO")) {
                     // Add to available JoinServers List
-                    //gameC.offerGame(new GameOffer(receivePacket.getAddress(), enemyJoinPort));
+                    gameC.offerGame(new GameOffer(receivePacket.getAddress(), enemyJoinPort));
                 }
             }
         }catch(Exception e){

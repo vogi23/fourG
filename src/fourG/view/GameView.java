@@ -152,7 +152,7 @@ public class GameView extends JFrame implements IModelObserver {
     
     @Override
     public void update() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+           System.err.println("GameView.update noch nicht implementiert");
     }
     
 }
