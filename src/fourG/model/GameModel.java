@@ -18,44 +18,54 @@ import java.util.HashSet;
  */
 public class GameModel implements IGameModelModifications, IGameModelInformations {
     
-    private transient HashSet<IModelObserver> observers;
-    private ModelState state;
-    GameBoard gameBoard;
-    
+    //Playdata
     private Player nextPlayer;
     private Player currentPlayer;
     private Player winner;
-    private int row;            //Zeile, waagerecht
-    private int colum;          //Spalte senkrecht
     private int yCurrent;
     private int xCurrent;
+    
+    //Size of gameBoard and 
+    private int row;            //Zeile, waagerecht
+    private int colum;          //Spalte senkrecht
     private final int winValue=4;
-    //private GameBoard board;                  //CHANGE it
+    
+    //Classes
+    private transient HashSet<IModelObserver> observers;
     private ArrayList<GameOffer> gameoffers;    //CHECK it
+    private ModelState state;
+    private GameBoard gameBoard;
+    
+    
     
     public GameModel(){
-        this(6,7,Player.Red);
+        this(7,6);              //Standart size
     }
-    public GameModel(int pWidth,int pHeight,Player pFirstPlayer){
-        //observers = new ArrayList
+    public GameModel(int pWidth,int pHeight){
+
+        //Init gameBoardData
         row=pWidth;
         colum=pHeight;
-        gameBoard=new GameBoard(row,colum);
-        nextPlayer=pFirstPlayer;
+        
+        //Init Playdata
+        nextPlayer=Player.Red;
+        currentPlayer=Player.None;
+        winner=Player.None;
+        yCurrent=-1;
+        xCurrent=-1;
+        //Init Objects
         observers = new HashSet<IModelObserver>();
         gameoffers = new ArrayList<GameOffer>();
-        state = ModelState.Playing;                          //CHECK it
-        winner=Player.None;
+        state = ModelState.Home;                          //CHECK it
+        gameBoard=new GameBoard(row,colum);
     }
-    
-
-    
+     
     @Override
     public boolean processMove(Move m) {
         //returnVar, true if move is valid
         //Validate Move
         gameBoard.printArray();
-        if(m==null){                                        //MoveObject empty
+        if(m==null){                                     //MoveObject empty
             return false;           
         }
         if(m.getPlayer()!=nextPlayer){                   //wrong Player
@@ -85,6 +95,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
             nextPlayer=Player.Red;
             currentPlayer=Player.Blue;
         }
+        broadcastUpdate();
         return true;    
     }
 
@@ -92,6 +103,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     public Move getLastMove() {
         Move dummy=new Move(xCurrent);
         dummy.setPlayer(currentPlayer);
+        dummy.setYPosition(yCurrent);
         return dummy;
     }
 
@@ -177,6 +189,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     public ModelState getState() {
         return state;
     }
+    
     @Override
     public void setState(ModelState s) {
         if(state == s){
