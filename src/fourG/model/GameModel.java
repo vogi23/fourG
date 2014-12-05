@@ -24,6 +24,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     
     private Player nextPlayer;
     private Player currentPlayer;
+    private Player winner;
     private int row;            //Zeile, waagerecht
     private int colum;          //Spalte senkrecht
     private int yCurrent;
@@ -44,15 +45,10 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         observers = new HashSet<IModelObserver>();
         gameoffers = new ArrayList<GameOffer>();
         state = ModelState.Playing;                          //CHECK it
+        winner=Player.None;
     }
     
-    /*public void setWidth(int i){
-        width = i;
-    }
-    public void setHeight(int i){
-        height = i;
-    }*/
-            
+
     
     @Override
     public boolean processMove(Move m) {
@@ -94,12 +90,14 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
 
     @Override
     public Move getLastMove() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Move dummy=new Move(xCurrent);
+        dummy.setPlayer(currentPlayer);
+        return dummy;
     }
 
     @Override
     public GameBoard getBoard() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return gameBoard;
     }
     
 @Override
@@ -114,6 +112,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
                 counter++;
             }
             if(counter>=winValue-1){
+                winner=currentPlayer;
                 return true;        //y Win
             }
         }
@@ -131,28 +130,18 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
                 counter++;
         }
         if(counter>=winValue-1){
+                winner=currentPlayer;
                 return true;        //x Win
         }
         
         //check diag (direction right)
-        
-        //check x
-           /* if(yCurrent>winValue-1){
-            int leftCounter=0;
-            while(counter<winValue && myPlayField[xCurrent][yCurrent-counter]==currentPlayer){
-                counter++;
-            }
-            if(counter>=winValue){
-                return true;        //y Win
-            
-        }*/
         state=ModelState.GameOver;         //CHECK IT
         return false;
     }
 
     @Override
     public Player getWinner() {
-        throw new UnsupportedOperationException("Not supported yet.5"); //To change body of generated methods, choose Tools | Templates.
+        return winner;
     }
 
     @Override
