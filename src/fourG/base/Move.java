@@ -33,4 +33,9 @@ public class Move implements Serializable{
     public Player getPlayer(){
         return player;
     }
+    
+    @Override
+    public String toString(){
+        return "{Column: "+this.column+", Player: "+this.player+"}";
+    }
 }
