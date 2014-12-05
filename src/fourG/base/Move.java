@@ -1,6 +1,7 @@
 package fourG.base;
 
 import fourG.base.Player;
+import java.io.Serializable;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -12,14 +13,13 @@ import fourG.base.Player;
  *
  * @author vogi23
  */
-public class Move {
+public class Move implements Serializable{
     
     private int column;
-    private Player player;
+    private Player player = Player.None;
             
     public Move(int col){
-        this.column = column;
-        this.player = player;
+        this.column = col;
     }
     
     public int getColumn(){
