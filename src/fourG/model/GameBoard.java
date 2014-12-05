@@ -14,26 +14,59 @@ import fourG.base.Player;
  */
 public class GameBoard {
     
-    private int width;
-    private int height;
+    private int x;          //y, Koordinate
+    private int y;          //x Koordinate
+    private Player [][] myPlayField;
     
     public GameBoard(int width, int height){
-        this.width = width;
-        this.height = height;
+        this.x = width;
+        this.y = height;
+        initGameBoard();
     }
     
-    public void setCell(int x, int y, Player color){
-        
+    private void initGameBoard(){
+        //init Array
+        myPlayField=new Player[x][y];
+        for(int i=0;i<x;i++){
+            for(int j=0;j<y;j++){
+                myPlayField[i][j]=Player.None;
+            }
+        }
     }
     
-    public Player getCell(int x, int y){
-        throw new UnsupportedOperationException("GameBoard.getCell not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setCell(int pX, int pY, Player color){
+        myPlayField[pX][pY]=color;
+    }
+    
+    public Player getCell(int pX, int pY){
+        return myPlayField[pX][pY];
     }
     
     public int getWidth(){
-        return width;
+        return x;
     }
     public int getHeight(){
-        return height;
+        return y;
+    }
+    
+    public void printArray(){
+        String shortPlayCol="";
+         for(int i=y-1;i>=0;i--){
+            for(int j=x-1;j>=0;j--){
+                if(myPlayField[j][i]==Player.None){
+                    shortPlayCol="[/]";
+                }
+                else if(myPlayField[j][i]==Player.Red){
+                    shortPlayCol="[R]";
+                }
+                else if(myPlayField[j][i]==Player.Blue){
+                    shortPlayCol="[B]";
+                }
+                System.out.print(shortPlayCol);
+            }
+         System.out.println();
+        }
+         System.out.println();
+         System.out.println();
     }
 }

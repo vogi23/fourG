@@ -27,24 +27,91 @@ public class GameModelTest {
     }
 
     @Test
-    public void testAll(){
-        System.out.println("processMove");
-        Move mR = new Move(3,Player.Red,0);
-        Move mB = new Move(4,Player.Blue,0);
+    public void testHorizontal1(){
+        System.out.println("---------testHorizontal1---------");
+        Move mR = new Move(5);
+        mR.setPlayer(Player.Red);
+        Move mB = new Move(4);
+        mB.setPlayer(Player.Blue);
         GameModel myGame = new GameModel();
         boolean expResult = true;
         boolean result;
         
-        for(int i=0;i<5;i++){
+        for(int i=0;i<3;i++){
 
-            
             checkMove(myGame,mR);
             checkWinner(myGame,false);
+            mB = new Move(i);
+            mB.setPlayer(Player.Blue);
             checkMove(myGame,mB);
             checkWinner(myGame,false);
         }
+        mR = new Move(4);
+        mR.setPlayer(Player.Red);
         checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        mB = new Move(3);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mB);
         checkWinner(myGame,true);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+    }
+    
+        @Test
+    public void testHorizontal2(){
+        System.out.println("---------testHorizontal2---------");
+        Move mR = new Move(5);
+        mR.setPlayer(Player.Red);
+        Move mB = new Move(4);
+        mB.setPlayer(Player.Blue);
+        GameModel myGame = new GameModel();
+        boolean expResult = true;
+        boolean result;
+        
+        for(int i=0;i<3;i++){
+
+            mR = new Move(i*2);
+            mR.setPlayer(Player.Red);
+            checkMove(myGame,mR);
+            checkWinner(myGame,false);
+            mB = new Move(i*2+1);
+            mB.setPlayer(Player.Blue);
+            checkMove(myGame,mB);
+            checkWinner(myGame,false);
+        }
+        for(int i=0;i<3;i++){
+            mR = new Move(i*2+1);
+            mR.setPlayer(Player.Red);
+            checkMove(myGame,mR);
+            checkWinner(myGame,false);
+            mB = new Move(i*2);
+            mB.setPlayer(Player.Blue);
+            checkMove(myGame,mB);
+            checkWinner(myGame,false);
+        }
+        mR = new Move(5);
+        mR.setPlayer(Player.Red);
+           for(int i=0;i<2;i++){
+            checkMove(myGame,mR);
+            checkWinner(myGame,false);
+            mB = new Move(i);
+            mB.setPlayer(Player.Blue);
+            checkMove(myGame,mB);
+            checkWinner(myGame,false);
+        }
+        mR = setMove(0,Player.Red);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        mB = setMove(3,Player.Blue);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        mB = setMove(2,Player.Blue);
+        checkMove(myGame,mB);
+        checkWinner(myGame,true);
+        checkMove(myGame,mR);
     }
     
     public void checkMove(GameModel myGame, Move m){
@@ -52,17 +119,51 @@ public class GameModelTest {
         boolean result= myGame.processMove(m);
         assertEquals(expResult, result);
         if(expResult!=result){
-            fail("Move Red konnte nicht eingefühgt werden");
+            fail("Move Red konnte nicht eingefügt werden");
         }
         
     }
     
+    private Move setMove(int x,Player player){
+        Move dummy=new Move(x);
+        dummy.setPlayer(player);
+        return dummy;
+    }
+    
+    @Test
+    public void testSenkrecht1(){
+        System.out.println("---------testSenkrecht2---------");
+        Move mR = new Move(5);
+        mR.setPlayer(Player.Red);
+        Move mB = new Move(5);
+        mB.setPlayer(Player.Blue);
+        GameModel myGame = new GameModel();
+        boolean expResult = true;
+        boolean result;
+        
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        mB = new Move(2);
+        mB.setPlayer(Player.Blue);
+        for(int i=0;i<3;i++){
+            checkMove(myGame,mR);
+            checkWinner(myGame,false);
+            checkMove(myGame,mB);
+            checkWinner(myGame,false);
+        }
+        checkMove(myGame,mR);
+        checkWinner(myGame,true);
+        checkMove(myGame,mB);
+    }
+    
     public void checkWinner(GameModel myGame,boolean expResult){
         boolean result= myGame.isGameover();
-        assertEquals(expResult, result);
         if(expResult!=result){
-            fail("Move Red konnte nicht eingefühgt werden");
+            fail("Move Red konnte nicht eingefügt werden");
         }
+         assertEquals(expResult, result);
     }
    /* @Test
     public void testProcessMove() {
