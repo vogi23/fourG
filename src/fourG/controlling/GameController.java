@@ -46,7 +46,11 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     }
     
     private void startGame(){
+        System.out.println("Game Started, make Move");
         model.setState(ModelState.Playing);
+        Move m = new Move(1);
+        m.setPlayer(Player.Red);
+        makeMove(m);
     }
     
     /**

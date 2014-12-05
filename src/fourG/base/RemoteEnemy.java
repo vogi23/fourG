@@ -8,7 +8,9 @@ import fourG.model.GameOffer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import static java.lang.System.in;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -49,7 +51,26 @@ public class RemoteEnemy extends Enemy {
      */
     @Override
     public void receiveMove(Move m) {
-        throw new UnsupportedOperationException("Not supported yet.2"); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("Try sending my Move over Network to enemy");
+        
+        try(Socket client = new Socket(enemyAddr, enemyGamePort)){
+            
+            ObjectOutputStream moveOut = new ObjectOutputStream(client.getOutputStream());
+            moveOut.writeObject(m);
+            moveOut.flush();
+            System.out.println("Move sent over network: waiting for confirmation");
+            
+            BufferedReader confirmation = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            String line = confirmation.readLine();
+            System.out.println("Enemy confirmation (move received) received. Msg: "+line);
+            if(line.equals("MOVE_PROCESSED")){
+                System.out.println("Move sent and processed by enemy");
+            }else{
+                System.err.println("Move could not be processed by enemy. msg: "+line);
+            }
+        }catch(IOException ex){
+            System.err.println("Enemy not reachable anymore");
+        }
     }
     
     /**
@@ -107,6 +128,7 @@ public class RemoteEnemy extends Enemy {
                 if (message.equals("FOURG_ENEMY_HELLO")) {
                     // Add to available JoinServers List
                     gameC.offerGame(new GameOffer(receivePacket.getAddress(), enemyJoinPort));
+                    break; // TESTING
                 }
             }
         }catch(Exception e){
@@ -162,8 +184,8 @@ public class RemoteEnemy extends Enemy {
             System.out.println("JOINER connection status: "+line);
             if(line.equals("YES_LETS_PLAY_ON_PORT_4242")){
                 enemyAddr = o.getAddress();
-                gameC.enemyReady();
                 System.out.println("JOINER enemyReady!");
+                gameC.enemyReady();
             }else{
                 System.out.println("JOINER Server refused my join!");
             }
