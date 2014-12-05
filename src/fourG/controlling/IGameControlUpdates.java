@@ -17,4 +17,6 @@ public interface IGameControlUpdates {
     public void receiveMove(Move m) throws InvalidMoveException ;
     public void enemyReady();
     public void offerGame(GameOffer o);
+    
+    public Object getConsoleLockObject();
 }

@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,39 +25,70 @@ public class JoinServer implements Runnable{
     private Thread thread = null;
     
     private final int port = 4241;
-    private RemoteEnemy e;
+    private RemoteEnemy enemy;
     
     public JoinServer(RemoteEnemy e){
-        this.e = e;
+        this.enemy = e;
         this.start();
     }
     
     @Override
     public void run(){
-        System.out.println("JoinServer:started");
         boolean enemyFound = false;
-        try(ServerSocket listen = new ServerSocket(port)){
+        ServerSocket listen;
+        try{
+            synchronized(enemy.getConsoleLockObject()){
+                listen = new ServerSocket(port);
+                System.out.println("JoinServer:started");
+            }
             while(!enemyFound){
-                System.out.println("JoinServer: waiting for request");
+                synchronized(enemy.getConsoleLockObject()){
+                    System.out.println("JoinServer: waiting for request");
+                }
                 Socket client = listen.accept();
                 PrintWriter out = new PrintWriter(client.getOutputStream());
                 BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 String msg = in.readLine();
                 
-                System.out.println("JoinServer: received "+msg);
-                
                 String response = "NO_FUCK_YOU";
                 if(msg.equals("CAN_I_PLAY")){
-                    response = "YES_LETS_PLAY_ON_PORT_4242";
+                    response = "YES_LETS_PLAY";
                     enemyFound = true;
-                    e.enemyFound(client.getInetAddress());
                 }
-                System.out.println("JoinServer: Antwort "+response);
-                out.println(response);
-                out.flush();       
+                
+                if(enemyFound){
+                    // Waiting for GameServer to startup completly
+                    synchronized(enemy.gameserverLoadingWait){
+                        while(!enemy.gameserverLoaded){
+                            try {
+                                enemy.gameserverLoadingWait.wait();
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(JoinServer.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                }
+                
+                // Send message to joiner
+                synchronized(enemy.getConsoleLockObject()){
+                    System.out.println("JoinServer: received "+msg);
+                    out.println(response);
+                    out.flush();       
+                    System.out.println("JoinServer: Antwort sent "+response);
+                }
+                
+                if(!enemyFound){
+                    continue;
+                }
+                
+                enemy.enemyFound(client.getInetAddress());
             }
+            
+            listen.close();
         }catch(IOException ex){
-            System.err.println(ex.getMessage());
+            synchronized(enemy.getConsoleLockObject()){
+                System.err.println(ex.getMessage());
+            }
         }
     }
     

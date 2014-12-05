@@ -13,4 +13,5 @@ package fourG.base;
 public interface IEnemy {
     
     public void receiveMove(Move m);
+    public Object getConsoleLockObject();
 }

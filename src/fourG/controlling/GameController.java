@@ -7,6 +7,8 @@ import fourG.base.RemoteEnemy;
 import fourG.model.GameOffer;
 import fourG.model.IGameModelModifications;
 import fourG.model.ModelState;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this template, choose Tools | Templates
@@ -21,13 +23,18 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     
     private IGameModelModifications model;
     private IEnemy enemy;
-    private Player iAm = Player.Red;         // Color (Player identification) of this Application
+    private Player iAm = Player.Red;      // Color (Player identification) of this Application
+    
+    private final Object consoleLock = new Object();
     
     public GameController(){
         
     }
     
-    
+    @Override
+    public Object getConsoleLockObject(){
+        return consoleLock;
+    }
     
     public void setModel(IGameModelModifications m){
         this.model = m;
@@ -42,29 +49,54 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     }
     
     public void enemyReady(){
+        synchronized(consoleLock){
+            System.out.println("GameController: enemy Ready -> startgame");
+        }
         startGame();
     }
     
     private void startGame(){
-        System.out.println("Game Started, make Move");
         model.setState(ModelState.Playing);
+        
+        
+        synchronized(consoleLock){ 
+            System.out.println("FOR TESTING: sumbit 3 Moves on random Columns every 500ms");
+        }
         Move m = new Move(1);
         m.setPlayer(Player.Red);
-        makeMove(m);
+        
+        for(int i = 0; i< 3; i++){
+            makeMove(m);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /**
      * Will be called From any UI to process a Move.
      * 
      * @param m 
+     * @return  boolean
      */
     @Override
     public boolean makeMove(Move m){
         
         // Process move. return false if invalid.
         m.setPlayer(iAm);
+        synchronized(consoleLock){ 
+            System.out.println("GameController makeMove: "+m);
+        }
         if(!model.processMove(m)){
+            synchronized(consoleLock){ 
+                System.out.println("Move is NOT valid");
+            }
             return false;
+        }
+        synchronized(consoleLock){ 
+            System.out.println("Move is valid");
         }
         
         // Send valid move to enemy
