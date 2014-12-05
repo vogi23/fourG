@@ -20,8 +20,8 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     
     private transient HashSet<IModelObserver> observers;
     private ModelState state;
+    GameBoard gameBoard;
     
-    private Player [][] myPlayField;
     private Player nextPlayer;
     private Player currentPlayer;
     private int row;            //Zeile, waagerecht
@@ -39,15 +39,8 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         //observers = new ArrayList
         row=pWidth;
         colum=pHeight;
-        myPlayField=new Player[row][colum];
+        gameBoard=new GameBoard(row,colum);
         nextPlayer=pFirstPlayer;
-        //init Array
-        for(int i=0;i<pWidth;i++){
-            for(int j=0;j<pHeight;j++){
-                myPlayField[i][j]=Player.None;
-            }
-        }
-        
         observers = new HashSet<IModelObserver>();
         gameoffers = new ArrayList<GameOffer>();
         state = ModelState.Playing;                          //CHECK it
@@ -65,25 +58,27 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     public boolean processMove(Move m) {
         //returnVar, true if move is valid
         //Validate Move
+        gameBoard.printArray();
         if(m==null){                                        //MoveObject empty
             return false;           
         }
         if(m.getPlayer()!=nextPlayer){                   //wrong Player
             return false;
         }
-        if(myPlayField[m.getColumn()][colum-1]!=Player.None){  //Field used
+        if(gameBoard.getCell(m.getColumn(),colum-1)!=Player.None){  //Field used
             return false;
         }
         //-----Move is valid----
         //Get y Position (colum)
         int counter=0;
-        while(myPlayField[m.getColumn()][counter]!=Player.None){
+        while(gameBoard.getCell(m.getColumn(),counter)!=Player.None){
             counter++;
         }
         xCurrent=m.getColumn();
         yCurrent=counter;
         //insert Disc
-        myPlayField[xCurrent][yCurrent]=m.getPlayer();
+
+        gameBoard.setCell(xCurrent, yCurrent, m.getPlayer());
         //change Member
         //ADD CODE HERE, change other Members like counter
         if(m.getPlayer()==Player.Red){
@@ -114,7 +109,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         int counterDown=1;
         //check y
         if(yCurrent>=winValue){
-            while(counter<winValue && myPlayField[xCurrent][yCurrent-counterDown]==currentPlayer){
+            while(counter<winValue && gameBoard.getCell(xCurrent,yCurrent-counterDown)==currentPlayer){
                 counterDown++;
                 counter++;
             }
@@ -127,17 +122,19 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         counter=0;
         int counterLeft=1;
         int counterRight=1;
-        while(counterLeft<winValue && 0<=xCurrent-counterLeft && myPlayField[xCurrent-counterLeft][yCurrent]==currentPlayer){
+        while(counter<winValue && 0<=xCurrent-counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent)==currentPlayer){
                 counterLeft++;
+                counter++;
         }
-        counter=counterLeft-1;
-        while(counter<winValue && row<xCurrent+counterRight && myPlayField[xCurrent+counterRight][yCurrent]==currentPlayer){
+        while(counter<winValue && row<xCurrent+counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent)==currentPlayer){
                 counterRight++;
                 counter++;
         }
-        if(counter>=winValue){
+        if(counter>=winValue-1){
                 return true;        //x Win
         }
+        
+        //check diag (direction right)
         
         //check x
            /* if(yCurrent>winValue-1){

@@ -27,24 +27,35 @@ public class GameModelTest {
     }
 
     @Test
-    public void testAll(){
+    public void testHorizontal(){
         System.out.println("processMove");
-        Move mR = new Move(3,Player.Red,0);
-        Move mB = new Move(4,Player.Blue,0);
+        Move mR = new Move(5);
+        mR.setPlayer(Player.Red);
+        Move mB = new Move(4);
+        mB.setPlayer(Player.Blue);
         GameModel myGame = new GameModel();
         boolean expResult = true;
         boolean result;
         
-        for(int i=0;i<5;i++){
+        for(int i=0;i<3;i++){
 
-            
             checkMove(myGame,mR);
             checkWinner(myGame,false);
+            mB = new Move(i);
+            mB.setPlayer(Player.Blue);
             checkMove(myGame,mB);
             checkWinner(myGame,false);
         }
+        mR = new Move(4);
+        mR.setPlayer(Player.Red);
         checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        mB = new Move(3);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mB);
         checkWinner(myGame,true);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
     }
     
     public void checkMove(GameModel myGame, Move m){
@@ -52,7 +63,7 @@ public class GameModelTest {
         boolean result= myGame.processMove(m);
         assertEquals(expResult, result);
         if(expResult!=result){
-            fail("Move Red konnte nicht eingefühgt werden");
+            fail("Move Red konnte nicht eingefügt werden");
         }
         
     }
@@ -61,7 +72,7 @@ public class GameModelTest {
         boolean result= myGame.isGameover();
         assertEquals(expResult, result);
         if(expResult!=result){
-            fail("Move Red konnte nicht eingefühgt werden");
+            fail("Move Red konnte nicht eingefügt werden");
         }
     }
    /* @Test
