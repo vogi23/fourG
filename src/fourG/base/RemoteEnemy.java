@@ -51,6 +51,21 @@ public class RemoteEnemy extends Enemy {
         super(gamemodel, gamecontroller);
     }
     
+    @Override
+    public void killSockets(){
+        if(dserver != null){
+            dserver.interrupt();
+        }
+        
+        if(jserver != null){
+            jserver.interrupt();
+        }
+        
+        if(gserver != null){
+            gserver.interrupt();
+        }
+    }
+    
     public int getReceivingPort(){
         return enemyReceivesOnPort;
     }
@@ -190,8 +205,7 @@ public class RemoteEnemy extends Enemy {
      * 
      * Also diables Discovery- and Joining-Server
      * 
-     * @param adr
-     * @param port 
+     * @param adr 
      */
     public void enemyFound(InetAddress adr) {
         if(dserver != null){

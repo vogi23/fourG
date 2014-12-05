@@ -26,6 +26,11 @@ public abstract class Enemy implements IEnemy {
     @Override
     public abstract void receiveMove(Move m);
     
+    @Override
+    public void killSockets(){
+    
+    }
+    
     // Delegationsmethode
     public Object getConsoleLockObject(){
         return this.gameC.getConsoleLockObject();

@@ -31,6 +31,15 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         
     }
     
+    /**
+     * Kill all Dependencys which disturb the initiaion of a complete new game (ex. open Sockets still blocking ports)
+     */
+    public void kill(){
+        if(enemy != null){
+            enemy.killSockets();
+        }
+    }
+    
     @Override
     public Object getConsoleLockObject(){
         return consoleLock;

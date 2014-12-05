@@ -26,6 +26,7 @@ public class JoinServer implements Runnable{
     
     private final int port = 4241;
     private RemoteEnemy enemy;
+    private ServerSocket listen;
     
     public JoinServer(RemoteEnemy e){
         this.enemy = e;
@@ -35,7 +36,6 @@ public class JoinServer implements Runnable{
     @Override
     public void run(){
         boolean enemyFound = false;
-        ServerSocket listen;
         try{
             synchronized(enemy.getConsoleLockObject()){
                 listen = new ServerSocket(port);
@@ -87,7 +87,7 @@ public class JoinServer implements Runnable{
             listen.close();
         }catch(IOException ex){
             synchronized(enemy.getConsoleLockObject()){
-                System.err.println(ex.getMessage());
+                System.err.println("x2 "+ex.getMessage());
             }
         }
     }
@@ -97,5 +97,14 @@ public class JoinServer implements Runnable{
             thread = new Thread(this);
             thread.start();
         }
+    }
+    
+    public void interrupt(){
+        try {
+            listen.close();
+        } catch (IOException ex) {
+            Logger.getLogger(JoinServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        thread.interrupt();
     }
 }

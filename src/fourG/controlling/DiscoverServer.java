@@ -74,7 +74,7 @@ public class DiscoverServer implements Runnable{
         }
         catch(Exception e){
             synchronized(enemy.getConsoleLockObject()){
-                System.err.println(e.getMessage());
+                System.err.println("x1 "+e.getMessage());
             }
         }
     }
@@ -88,5 +88,10 @@ public class DiscoverServer implements Runnable{
             thread = new Thread(this);
             thread.start();
         }
+    }
+    
+    public void interrupt(){
+        socket.close();
+        thread.interrupt();
     }
 }

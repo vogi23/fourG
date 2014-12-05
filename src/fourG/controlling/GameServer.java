@@ -26,6 +26,7 @@ public class GameServer implements Runnable{
     
     private RemoteEnemy enemy;
     private IGameControlUpdates gameC;
+    private ServerSocket listen;
     
     private boolean stopFlag = false;
     
@@ -37,7 +38,6 @@ public class GameServer implements Runnable{
     
     @Override
     public void run(){
-        ServerSocket listen;
         try{
             synchronized(enemy.getConsoleLockObject()){
                 listen = new ServerSocket(enemy.getReceivingPort());
@@ -94,7 +94,7 @@ public class GameServer implements Runnable{
             listen.close();
         }catch(IOException ex){
             synchronized(enemy.getConsoleLockObject()){
-                System.err.println(ex.getMessage());
+                System.err.println("x3 "+ex.getMessage());
             }
         }
     }
@@ -104,5 +104,14 @@ public class GameServer implements Runnable{
             thread = new Thread(this);
             thread.start();
         }
+    }
+    
+    public void interrupt(){
+        try {
+            listen.close();
+        } catch (IOException ex) {
+            Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        thread.interrupt();
     }
 }
