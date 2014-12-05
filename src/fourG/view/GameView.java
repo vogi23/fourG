@@ -8,8 +8,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.event.*;
+import java.awt.geom.Ellipse2D;
 import java.io.File;
 import javax.swing.*;
 
@@ -29,6 +31,8 @@ public class GameView extends JFrame implements IModelObserver {
     private IGameModelInformations model;
     private int xSize;
     private int ySize;
+    private int gamePanelHeight;
+    private int gamePanelWidth;
 
     JFrame gui;
     JPanel informationPanel = new JPanel();
@@ -37,7 +41,7 @@ public class GameView extends JFrame implements IModelObserver {
     JLabel yourIP = new JLabel("Loaclhost");
     JLabel opponentIP = new JLabel("256.256.256.256");
     JPanel gamePanel = new JPanel();
-    JLabel fourGInterface = new JLabel("Test"); // für Darstellung des Interfaces, Mouse-Event
+    JPanel fourGInterface = new GPanel(gamePanelWidth, gamePanelHeight, game); // Graphics Container
 
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
@@ -51,17 +55,18 @@ public class GameView extends JFrame implements IModelObserver {
     JMenuItem setOptions = new JMenuItem("Set Options");
     JFileChooser loadedGameChooser = new JFileChooser();
     JFileChooser saveGameChooser = new JFileChooser();
+   
 
     public GameView(MgmtController mgmt, GameController game, IGameModelInformations model) {
         super("fourG");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Toolkit tk = Toolkit.getDefaultToolkit();  
-        xSize = ((int) tk.getScreenSize().getWidth());  
-        ySize = ((int) tk.getScreenSize().getHeight());  
-        int gameHeight = (int) (Math.round(ySize * 0.80));
-        int gameWidth = (int) (Math.round(xSize * 0.80));
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        xSize = ((int) tk.getScreenSize().getWidth());
+        ySize = ((int) tk.getScreenSize().getHeight());
+        int gameHeight = (int) (Math.round(ySize * 0.5));
+        int gameWidth = (int) (Math.round(xSize * 0.8));
         setPreferredSize(new Dimension(gameWidth, gameHeight));
-        
+
         this.mgmt = mgmt;
         this.game = game;
         this.model = model;
@@ -70,9 +75,8 @@ public class GameView extends JFrame implements IModelObserver {
         createInterface();
         pack();
         setVisible(true);
-
     }
-    
+
     private void createMenu() {
         menuFile.add(menuFileNewLocal);
         menuFileNewLocal.addActionListener(
@@ -136,9 +140,9 @@ public class GameView extends JFrame implements IModelObserver {
     }
 
     private void createInterface() {
-        setLayout(new GridLayout(1,2));
+        setLayout(new GridLayout(1, 2));
         add(informationPanel);
-        informationPanel.setLayout(new BoxLayout(informationPanel,BoxLayout.Y_AXIS));
+        informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.Y_AXIS));
         informationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         informationPanel.add(yourName);
         informationPanel.add(yourIP);
@@ -147,15 +151,15 @@ public class GameView extends JFrame implements IModelObserver {
         add(gamePanel);
         gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
-        int gamePanelHeight = (int) (Math.round(ySize * 0.70));
-        int gamePanelWidth = (int) (Math.round((xSize/2) * 0.60));
-        fourGInterface.setPreferredSize(new Dimension(gamePanelWidth, gamePanelHeight));
+        gamePanelHeight = (int) (Math.round(ySize * 1));
+        gamePanelWidth = (int) (Math.round((xSize / 2) * 1));
+        fourGInterface.setPreferredSize(new Dimension(700, 600));
         fourGInterface.setBorder(BorderFactory.createLineBorder(Color.red));
         fourGInterface.addMouseListener(
                 new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        fourGAction();
+                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                     }
 
                     @Override
@@ -184,11 +188,6 @@ public class GameView extends JFrame implements IModelObserver {
         System.exit(10);
     }
 
-    private int fourGAction() {
-        System.out.println(getX());
-        return getX();
-    }
-
     private String getFileName() {
         int r = loadedGameChooser.showOpenDialog(this);
         String s = "no File!";
@@ -200,6 +199,6 @@ public class GameView extends JFrame implements IModelObserver {
 
     @Override
     public void update() {
-        //  System.err.println("GameView.update noch nicht implementiert");
+        fourGInterface.repaint();
     }
 }
