@@ -37,14 +37,15 @@ public class DiscoverServer implements Runnable{
         
          System.out.println("DiscoverServer started");
          try{
-            socket = new DatagramSocket(port, InetAddress.getByName("0.0.0.0"));
+            socket = new DatagramSocket(port);
             socket.setBroadcast(true);
             
+             
             while(!stopFlag){
                 byte[] recvBuf = new byte[15000];
                 DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
-                System.out.println("DiscoverServer waiting for packets!");
                 socket.receive(packet);
+                
                 String message = new String(packet.getData()).trim();
                 
                 System.out.println("DiscoverServer Packet received! "+message);

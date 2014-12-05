@@ -58,6 +58,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     public boolean makeMove(Move m){
         
         // Process move. return false if invalid.
+        m.setPlayer(iAm);
         if(!model.processMove(m)){
             return false;
         }
@@ -81,6 +82,11 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     public void receiveMove(Move m) throws InvalidMoveException {
         
         // Process move. return false if invalid.
+        Player enemycolor = Player.Red;
+        if(iAm == Player.Red){
+            enemycolor = Player.Blue;
+        }
+        m.setPlayer(enemycolor);
         if(!model.processMove(m)){
             throw new InvalidMoveException();
         }
