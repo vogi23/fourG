@@ -47,8 +47,7 @@ public class MgmtController {
     public void initLoadedGame(File f){
         //...
     }
-    
-    
+        
     /**
      * Start a local game against the computer
      * 
