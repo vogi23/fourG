@@ -1,5 +1,6 @@
 package fourG.view;
 
+import fourG.base.Move;
 import fourG.controlling.MgmtController;
 import fourG.controlling.GameController;
 import fourG.model.IGameModelInformations;
@@ -8,12 +9,23 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Shape;
-import java.awt.Toolkit;
 import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
 import java.io.File;
 import javax.swing.*;
+import java.awt.Graphics;
+
+
+/** To-Do-List:
+*      - Farbe des Spielers auslesen
+*      - yPosition des Moves richtig einzeichnen
+*      - xPosition richtig setzen
+*      - Hintergrund einrichten
+*      - Update implementieren
+*      - Spielfeld skaliert mit Faktor 100
+*      --> Anpassung der Spielfeldgrösse damit theoretisch möglich
+*      --> Rundungsfehler bei Typecasting zu int für Array genutzt
+*/ 
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -29,10 +41,8 @@ public class GameView extends JFrame implements IModelObserver {
     private MgmtController mgmt;
     private GameController game;
     private IGameModelInformations model;
-    private int xSize;
-    private int ySize;
-    private int gamePanelHeight;
-    private int gamePanelWidth;
+    private int gamePanelHeight = 600;
+    private int gamePanelWidth = 700;
 
     JFrame gui;
     JPanel informationPanel = new JPanel();
@@ -41,7 +51,7 @@ public class GameView extends JFrame implements IModelObserver {
     JLabel yourIP = new JLabel("Loaclhost");
     JLabel opponentIP = new JLabel("256.256.256.256");
     JPanel gamePanel = new JPanel();
-    JPanel fourGInterface = new GPanel(gamePanelWidth, gamePanelHeight, game); // Graphics Container
+    JPanel fourGInterface = new JPanel(); // Graphics Container
 
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
@@ -55,17 +65,10 @@ public class GameView extends JFrame implements IModelObserver {
     JMenuItem setOptions = new JMenuItem("Set Options");
     JFileChooser loadedGameChooser = new JFileChooser();
     JFileChooser saveGameChooser = new JFileChooser();
-   
 
     public GameView(MgmtController mgmt, GameController game, IGameModelInformations model) {
         super("fourG");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        xSize = ((int) tk.getScreenSize().getWidth());
-        ySize = ((int) tk.getScreenSize().getHeight());
-        int gameHeight = (int) (Math.round(ySize * 0.5));
-        int gameWidth = (int) (Math.round(xSize * 0.8));
-        setPreferredSize(new Dimension(gameWidth, gameHeight));
 
         this.mgmt = mgmt;
         this.game = game;
@@ -117,7 +120,6 @@ public class GameView extends JFrame implements IModelObserver {
         menuFile.add(menuFileLoadLocal);
         menuFileLoadLocal.addActionListener(
                 new ActionListener() {
-
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String fileName = getFileName();
@@ -151,15 +153,15 @@ public class GameView extends JFrame implements IModelObserver {
         add(gamePanel);
         gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
-        gamePanelHeight = (int) (Math.round(ySize * 1));
-        gamePanelWidth = (int) (Math.round((xSize / 2) * 1));
-        fourGInterface.setPreferredSize(new Dimension(700, 600));
-        fourGInterface.setBorder(BorderFactory.createLineBorder(Color.red));
+        fourGInterface.setPreferredSize(new Dimension(gamePanelWidth, gamePanelHeight));
         fourGInterface.addMouseListener(
                 new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                        int xPosition = e.getX();
+                        int yPosition = e.getY();
+                        fourGAction(xPosition, yPosition);
+                        calculateRow(xPosition);
                     }
 
                     @Override
@@ -197,8 +199,37 @@ public class GameView extends JFrame implements IModelObserver {
         return s;
     }
 
+    private int calculateRow(int xPosition) {
+        int xCurrent = xPosition / 100;
+        System.out.println(xCurrent);
+        game.makeMove(new Move(xCurrent));
+        return xCurrent;
+    }
+
+    private void fourGAction(int xPosition, int yPosition) {
+        drawCircle(xPosition, yPosition);
+        System.out.println(xPosition + " " + yPosition);
+    }
+   
+    public void drawCircle(int x, int y) {
+        Graphics g = this.getGraphics();
+        g.setColor(Color.red);
+        g.drawOval(x, y, 50, 50);
+        g.fillOval(x, y, 50, 50);
+    }
+
+    public void drawInterface(Graphics g) {
+        for (int i = 0; i <= 7; i++) {
+            int y = (i * 100);
+            g.drawLine(0, y, 700, y);
+        }
+        for (int j = 0; j <= 6; j++) {
+            int x = (j * 100);
+            g.drawLine(j, 0, j, 600);
+        }
+    }
+
     @Override
     public void update() {
-        fourGInterface.repaint();
     }
 }

@@ -38,4 +38,8 @@ public class Move implements Serializable{
     public String toString(){
         return "{Column: "+this.column+", Player: "+this.player+"}";
     }
+
+    public void setYPosition(int yCurrent) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
