@@ -1,6 +1,7 @@
 package fourG.base;
 
 import fourG.base.Player;
+import java.awt.Color;
 import java.io.Serializable;
 
 /*
@@ -35,12 +36,26 @@ public class Move implements Serializable{
         return player;
     }
     
+    public Color getPlayerColor(){
+       if(player==player.Red){
+           return Color.RED;
+       }
+       else if(player==player.Blue){
+           return Color.BLUE;
+       }
+       else{
+           return Color.PINK;
+       }
+    }
+    
    public void setYPosition(int pY){
        y=pY;
    }
-    public int getYPosition(int pY){
+   
+    public int getYPosition(){
        return y;
    }
+
     @Override
     public String toString(){
         return "{Column: "+this.column+", Player: "+this.player+"}";
