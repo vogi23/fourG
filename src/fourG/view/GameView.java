@@ -14,19 +14,13 @@ import java.io.File;
 import javax.swing.*;
 import java.awt.Graphics;
 
-
-/** To-Do-List:
-*      - Farbe des Spielers auslesen
-*      - yPosition des Moves richtig einzeichnen
-*      - xPosition richtig setzen
-*      - Hintergrund einrichten
-*      - Update implementieren
-*      - Spielfeld skaliert mit Faktor 100
-*      --> Anpassung der Spielfeldgrösse damit theoretisch möglich
-*      --> Rundungsfehler bei Typecasting zu int für Array genutzt
-*/ 
-
-
+/**
+ * To-Do-List: - Farbe des Spielers auslesen - yPosition des Moves richtig
+ * einzeichnen - Hintergrund bei Erstellung des Interfaces einrichten - Update
+ * implementieren - Spielfeld skaliert mit Faktor 100 --> Anpassung der
+ * Spielfeldgrösse damit theoretisch möglich --> Rundungsfehler bei Typecasting
+ * zu int für Array genutzt
+ */
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -154,14 +148,15 @@ public class GameView extends JFrame implements IModelObserver {
         gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
         fourGInterface.setPreferredSize(new Dimension(gamePanelWidth, gamePanelHeight));
+        fourGInterface.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
         fourGInterface.addMouseListener(
                 new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         int xPosition = e.getX();
                         int yPosition = e.getY();
-                        fourGAction(xPosition, yPosition);
                         calculateRow(xPosition);
+                        fourGAction(xPosition, yPosition);
                     }
 
                     @Override
@@ -201,31 +196,34 @@ public class GameView extends JFrame implements IModelObserver {
 
     private int calculateRow(int xPosition) {
         int xCurrent = xPosition / 100;
-        System.out.println(xCurrent);
         game.makeMove(new Move(xCurrent));
         return xCurrent;
     }
 
     private void fourGAction(int xPosition, int yPosition) {
         drawCircle(xPosition, yPosition);
-        System.out.println(xPosition + " " + yPosition);
-    }
-   
-    public void drawCircle(int x, int y) {
-        Graphics g = this.getGraphics();
-        g.setColor(Color.red);
-        g.drawOval(x, y, 50, 50);
-        g.fillOval(x, y, 50, 50);
+        drawInterface();
     }
 
-    public void drawInterface(Graphics g) {
+    public void drawCircle(int xPosition, int yPosition) {
+        Graphics g = fourGInterface.getGraphics();
+        g.setColor(Color.red);
+        int xPos = ((xPosition/100)*100)+25; // x-Value von Calculate Row, oder von Move-Berechnung
+        int yPos = ((yPosition/100)*100)+25; //y-Value von Move-Berechnung
+        g.drawOval(xPos, yPos, 50, 50);
+        g.fillOval(xPos, yPos, 50, 50);
+    }
+
+    public void drawInterface() {
+        Graphics g = fourGInterface.getGraphics();
+        g.setColor(Color.blue);
         for (int i = 0; i <= 7; i++) {
-            int y = (i * 100);
-            g.drawLine(0, y, 700, y);
+            int yPos = (i * 100);
+            g.drawLine(0, yPos, 700, yPos);
         }
         for (int j = 0; j <= 6; j++) {
-            int x = (j * 100);
-            g.drawLine(j, 0, j, 600);
+            int xPos = (j * 100);
+            g.drawLine(xPos, 0, xPos, 600);
         }
     }
 
