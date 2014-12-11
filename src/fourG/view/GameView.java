@@ -159,7 +159,6 @@ public class GameView extends JFrame implements IModelObserver {
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
         fourGInterface.setPreferredSize(new Dimension(gamePanelWidth, gamePanelHeight));
         fourGInterface.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
-        //drawInterface();
         fourGInterface.addMouseListener(
                 new MouseListener() {
                     @Override
@@ -167,7 +166,7 @@ public class GameView extends JFrame implements IModelObserver {
                         int xPosition = e.getX();
                         int yPosition = e.getY();
                         calculateRow(xPosition);
-                        fourGAction(xPosition, yPosition);
+                        drawCircle(xPosition, yPosition);
                     }
 
                     @Override
@@ -208,29 +207,24 @@ public class GameView extends JFrame implements IModelObserver {
 
     private int calculateRow(int xPosition) {
         int xCurrent = xPosition / 100;
-        //game.makeMove(new Move(xCurrent));
+        game.makeMove(new Move(xCurrent));
         return xCurrent;
     }
 
-    private void fourGAction(int xPosition, int yPosition) {
-        drawCircle(xPosition, yPosition);
-        
-    }
-
-    public void drawCircle(int xPosition, int yPosition) {
+    private void drawCircle(int xPosition, int yPosition) {
         Graphics g = fourGInterface.getGraphics();
         Move lastMove = model.getLastMove();
-        lastMove.getPlayerColor();
+        g.setColor(lastMove.getPlayerColor());
         System.out.println(lastMove);
-        int xPos = ((xPosition/100)*100)+25; // x-Value von Calculate Row, oder von Move-Berechnung
-        int yPos = ((yPosition/100)*100)+25; //y-Value von Move-Berechnung
-        g.drawOval(xPos, yPos, 50, 50);
-        g.fillOval(xPos, yPos, 50, 50);
+        int xPos = (lastMove.getXPosition()*100);
+        int yPos = (lastMove.getYPosition()*100);           
+        g.drawOval(xPos + 25, yPos + 25, 50, 50);
+        g.fillOval(xPos + 25, yPos + 25, 50, 50);
     }
     
 
 
-    public void drawInterface() {
+    private void drawInterface() {
         Graphics g = fourGInterface.getGraphics();
         g.setColor(Color.blue);
         for (int i = 0; i <= 7; i++) {
