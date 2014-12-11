@@ -1,5 +1,6 @@
 package fourG.view;
 
+import fourG.base.Move;
 import fourG.controlling.MgmtController;
 import fourG.controlling.GameController;
 import fourG.model.IGameModelInformations;
@@ -8,10 +9,23 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
+import java.awt.Graphics;
+
+
+/** To-Do-List:
+*      - Farbe des Spielers auslesen
+*      - yPosition des Moves richtig einzeichnen
+*      - xPosition richtig setzen
+*      - Hintergrund einrichten
+*      - Update implementieren
+*      - Spielfeld skaliert mit Faktor 100
+*      --> Anpassung der Spielfeldgrösse damit theoretisch möglich
+*      --> Rundungsfehler bei Typecasting zu int für Array genutzt
+*/ 
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,8 +41,8 @@ public class GameView extends JFrame implements IModelObserver {
     private MgmtController mgmt;
     private GameController game;
     private IGameModelInformations model;
-    private int xSize;
-    private int ySize;
+    private int gamePanelHeight = 600;
+    private int gamePanelWidth = 700;
 
     JFrame gui;
     JPanel informationPanel = new JPanel();
@@ -37,7 +51,7 @@ public class GameView extends JFrame implements IModelObserver {
     JLabel yourIP = new JLabel("Loaclhost");
     JLabel opponentIP = new JLabel("256.256.256.256");
     JPanel gamePanel = new JPanel();
-    JLabel fourGInterface = new JLabel("Test"); // für Darstellung des Interfaces, Mouse-Event
+    JPanel fourGInterface = new JPanel(); // Graphics Container
 
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
@@ -55,13 +69,7 @@ public class GameView extends JFrame implements IModelObserver {
     public GameView(MgmtController mgmt, GameController game, IGameModelInformations model) {
         super("fourG");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Toolkit tk = Toolkit.getDefaultToolkit();  
-        xSize = ((int) tk.getScreenSize().getWidth());  
-        ySize = ((int) tk.getScreenSize().getHeight());  
-        int gameHeight = (int) (Math.round(ySize * 0.80));
-        int gameWidth = (int) (Math.round(xSize * 0.80));
-        setPreferredSize(new Dimension(gameWidth, gameHeight));
-        
+
         this.mgmt = mgmt;
         this.game = game;
         this.model = model;
@@ -70,9 +78,8 @@ public class GameView extends JFrame implements IModelObserver {
         createInterface();
         pack();
         setVisible(true);
-
     }
-    
+
     private void createMenu() {
         menuFile.add(menuFileNewLocal);
         menuFileNewLocal.addActionListener(
@@ -113,7 +120,6 @@ public class GameView extends JFrame implements IModelObserver {
         menuFile.add(menuFileLoadLocal);
         menuFileLoadLocal.addActionListener(
                 new ActionListener() {
-
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String fileName = getFileName();
@@ -136,9 +142,9 @@ public class GameView extends JFrame implements IModelObserver {
     }
 
     private void createInterface() {
-        setLayout(new GridLayout(1,2));
+        setLayout(new GridLayout(1, 2));
         add(informationPanel);
-        informationPanel.setLayout(new BoxLayout(informationPanel,BoxLayout.Y_AXIS));
+        informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.Y_AXIS));
         informationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         informationPanel.add(yourName);
         informationPanel.add(yourIP);
@@ -147,15 +153,15 @@ public class GameView extends JFrame implements IModelObserver {
         add(gamePanel);
         gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
-        int gamePanelHeight = (int) (Math.round(ySize * 0.70));
-        int gamePanelWidth = (int) (Math.round((xSize/2) * 0.60));
         fourGInterface.setPreferredSize(new Dimension(gamePanelWidth, gamePanelHeight));
-        fourGInterface.setBorder(BorderFactory.createLineBorder(Color.red));
         fourGInterface.addMouseListener(
                 new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        fourGAction();
+                        int xPosition = e.getX();
+                        int yPosition = e.getY();
+                        fourGAction(xPosition, yPosition);
+                        calculateRow(xPosition);
                     }
 
                     @Override
@@ -184,11 +190,6 @@ public class GameView extends JFrame implements IModelObserver {
         System.exit(10);
     }
 
-    private int fourGAction() {
-        System.out.println(getX());
-        return getX();
-    }
-
     private String getFileName() {
         int r = loadedGameChooser.showOpenDialog(this);
         String s = "no File!";
@@ -198,8 +199,37 @@ public class GameView extends JFrame implements IModelObserver {
         return s;
     }
 
+    private int calculateRow(int xPosition) {
+        int xCurrent = xPosition / 100;
+        System.out.println(xCurrent);
+        game.makeMove(new Move(xCurrent));
+        return xCurrent;
+    }
+
+    private void fourGAction(int xPosition, int yPosition) {
+        drawCircle(xPosition, yPosition);
+        System.out.println(xPosition + " " + yPosition);
+    }
+   
+    public void drawCircle(int x, int y) {
+        Graphics g = this.getGraphics();
+        g.setColor(Color.red);
+        g.drawOval(x, y, 50, 50);
+        g.fillOval(x, y, 50, 50);
+    }
+
+    public void drawInterface(Graphics g) {
+        for (int i = 0; i <= 7; i++) {
+            int y = (i * 100);
+            g.drawLine(0, y, 700, y);
+        }
+        for (int j = 0; j <= 6; j++) {
+            int x = (j * 100);
+            g.drawLine(j, 0, j, 600);
+        }
+    }
+
     @Override
     public void update() {
-        //  System.err.println("GameView.update noch nicht implementiert");
     }
 }

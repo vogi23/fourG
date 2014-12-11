@@ -38,7 +38,11 @@ public class Move implements Serializable{
    public void setYPosition(int pY){
        y=pY;
    }
-    public int getPosition(int pY){
+    public int getYPosition(int pY){
        return y;
    }
+    @Override
+    public String toString(){
+        return "{Column: "+this.column+", Player: "+this.player+"}";
+    }
 }

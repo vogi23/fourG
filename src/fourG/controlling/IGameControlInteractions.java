@@ -18,4 +18,6 @@ public interface IGameControlInteractions {
     public boolean makeMove(Move m);
     public void reDiscoverEnemys();
     public void joinGame(GameOffer o);
+    
+    public Object getConsoleLockObject();
 }

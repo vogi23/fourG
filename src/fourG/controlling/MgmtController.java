@@ -26,12 +26,22 @@ public class MgmtController {
     private GameView gameV;
     
     public MgmtController(){
+        reInitGame();
+    }
+    
+    /**
+     * Inits new GameModel, Controller and View
+     */
+    private void reInitGame(){
+        
+        resetView();
+        resetController();
         
         // Create Controller
         this.gameC = new GameController();
         
         // Create Model
-        gameM = new GameModel();
+        this.gameM = new GameModel();
         this.gameC.setModel(gameM);
         
         // Create View
@@ -40,11 +50,30 @@ public class MgmtController {
     }
     
     /**
+     * Check if there is already a GameView open. If TRUE, close it.
+     */
+    private void resetView(){
+        if(this.gameV != null){
+            this.gameV.dispose();
+        }
+    }
+    
+    /**
+     * Check if there is already a GameController open. If TRUE, close all open Network Connections.
+     */
+    private void resetController(){
+        if(this.gameC != null){
+            gameC.kill();
+        }
+    }
+    
+    /**
      * Load a saved game.
      * 
      * Usually called from the GameView
      */
     public void initLoadedGame(File f){
+        reInitGame();
         //...
     }
         
@@ -54,6 +83,7 @@ public class MgmtController {
      * Usually called from the GameView
      */
     public void initLocalGame(){
+        reInitGame();
         
         gameM.setState(ModelState.PreparingEnemy);
         
@@ -67,6 +97,7 @@ public class MgmtController {
      * Usually called from the GameView
      */
     public void initCreateOnlineGame(){
+        reInitGame();
         
         gameM.setState(ModelState.WaitingForRemoteJoin);
         
@@ -83,6 +114,7 @@ public class MgmtController {
      * Usually called from the GameView
      */
     public void initJoinOnlineGame(){
+        reInitGame();
         
         // Set my color to Blue (Enemy will start with first move)
         gameC.setMyColor(Player.Blue);
@@ -96,6 +128,7 @@ public class MgmtController {
     }
     
     public void initSaveGame(){
+        reInitGame();
         //...
     }
 }

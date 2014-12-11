@@ -6,6 +6,7 @@
 
 package fourG.controlling;
 
+import fourG.base.RemoteEnemy;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -24,45 +25,57 @@ public class DiscoverServer implements Runnable{
     private Thread thread = null;
     
     private final int port = 4240;
+    private RemoteEnemy enemy;
     private DatagramSocket socket;
     
     private boolean stopFlag = false;
     
-    public DiscoverServer(){
+    public DiscoverServer(RemoteEnemy e){
         this.start();
+        this.enemy = e;
     }
     
     @Override
     public void run(){
         
-         System.out.println("DiscoverServer started");
          try{
-            socket = new DatagramSocket(port);
+            synchronized(enemy.getConsoleLockObject()){
+                socket = new DatagramSocket(port);
+                System.out.println("DiscoverServer started");
+            }
             socket.setBroadcast(true);
             
              
             while(!stopFlag){
                 byte[] recvBuf = new byte[15000];
                 DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
-                System.out.println("DiscoverServer waiting for packets");
+                synchronized(enemy.getConsoleLockObject()){
+                    System.out.println("DiscoverServer waiting for packets");
+                }
                 socket.receive(packet);
                 
                 String message = new String(packet.getData()).trim();
                 
-                System.out.println("DiscoverServer Packet received! "+message);
-                if(message.equals("DISCOVER_FOURG_ENEMY")){
-                    byte[] sendBuf = "FOURG_ENEMY_HELLO".getBytes();
-                    DatagramPacket sendpacket = new DatagramPacket(sendBuf, sendBuf.length, packet.getAddress(), packet.getPort());
-                    socket.send(sendpacket);
-                    System.out.println("DiscoverServer Packet beantwortet");
+                synchronized(enemy.getConsoleLockObject()){
+                    System.out.println("DiscoverServer Packet received! "+message);
+                    if(message.equals("DISCOVER_FOURG_ENEMY")){
+                        byte[] sendBuf = "FOURG_ENEMY_HELLO".getBytes();
+                        DatagramPacket sendpacket = new DatagramPacket(sendBuf, sendBuf.length, packet.getAddress(), packet.getPort());
+                        socket.send(sendpacket);
+                        System.out.println("DiscoverServer Packet beantwortet");
 
-                }else{
-                    System.out.println("DiscoverServer Packet ungültig");
+                    }else{
+                        System.out.println("DiscoverServer Packet ungültig");
+                    }
                 }
             }
+            
+            socket.close();
         }
         catch(Exception e){
-            System.err.println(e.getMessage());
+            synchronized(enemy.getConsoleLockObject()){
+                System.err.println("x1 "+e.getMessage());
+            }
         }
     }
     
@@ -75,5 +88,10 @@ public class DiscoverServer implements Runnable{
             thread = new Thread(this);
             thread.start();
         }
+    }
+    
+    public void interrupt(){
+        socket.close();
+        thread.interrupt();
     }
 }
