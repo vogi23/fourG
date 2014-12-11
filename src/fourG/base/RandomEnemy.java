@@ -29,14 +29,8 @@ public class RandomEnemy extends Enemy {
     @Override
     public void receiveMove(Move m) {
         Move move = new Move(random.nextInt(7));
-        GameBoard board = super.gameM.getBoard();
-        while(!board.isMoveValid(move)) {
-                        move = new Move(random.nextInt(7));
-        }
-        try {
-            super.gameC.receiveMove(move);
-        } catch (InvalidMoveException ex) {
-            Logger.getLogger(RandomEnemy.class.getName()).log(Level.SEVERE, null, ex);
+        while(!super.gameC.receiveMove(move)) {
+             move = new Move(random.nextInt(7));
         }
     }
 }
