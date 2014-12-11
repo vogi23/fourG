@@ -6,8 +6,12 @@
 package fourG.base;
 
 import fourG.controlling.IGameControlUpdates;
+import fourG.controlling.InvalidMoveException;
+import fourG.model.GameBoard;
 import fourG.model.IGameModelInformations;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,10 +27,14 @@ public class RandomEnemy extends Enemy {
     @Override
     public void receiveMove(Move m) {
         Move move = new Move(random.nextInt(7));
-        // TODO: send move
-//        while (super.gameM.) {
-//            move = new Move(random.nextInt(7));
-//        }
+        GameBoard board = super.gameM.getBoard();
+        while(!board.isMoveValid(move)) {
+                        move = new Move(random.nextInt(7));
+        }
+        try {
+            super.gameC.receiveMove(move);
+        } catch (InvalidMoveException ex) {
+            Logger.getLogger(RandomEnemy.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
 }
