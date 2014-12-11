@@ -16,16 +16,16 @@ import java.io.Serializable;
  */
 public class Move implements Serializable{
     
-    private int column;
+    private int x;
     private int y;
     private Player player = Player.None;
             
     public Move(int col){
-        this.column = col;
+        this.x = col;
     }
     
-    public int getColumn(){
-        return this.column;
+    public int getXPosition(){
+        return this.x;
     }
     
     public void setPlayer(Player p){
@@ -58,6 +58,6 @@ public class Move implements Serializable{
 
     @Override
     public String toString(){
-        return "{Column: "+this.column+", Player: "+this.player+"}";
+        return "{Column: "+this.x+", Player: "+this.player+"}";
     }
 }
