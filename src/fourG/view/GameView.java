@@ -166,7 +166,6 @@ public class GameView extends JFrame implements IModelObserver {
                         int xPosition = e.getX();
                         int yPosition = e.getY();
                         calculateRow(xPosition);
-                        drawCircle(xPosition, yPosition);
                     }
 
                     @Override
@@ -211,7 +210,7 @@ public class GameView extends JFrame implements IModelObserver {
         return xCurrent;
     }
 
-    private void drawCircle(int xPosition, int yPosition) {
+    private void drawCircle() {
         Graphics g = fourGInterface.getGraphics();
         Move lastMove = model.getLastMove();
         g.setColor(lastMove.getPlayerColor());
@@ -240,5 +239,6 @@ public class GameView extends JFrame implements IModelObserver {
     @Override
     public void update() {
         // Move lastMove; // For drawCircle
+        drawCircle();
     }
 }
