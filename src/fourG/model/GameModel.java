@@ -71,16 +71,16 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         if(m.getPlayer()!=nextPlayer){                   //wrong Player
             return false;
         }
-        if(gameBoard.getCell(m.getColumn(),colum-1)!=Player.None){  //Field used
+        if(gameBoard.getCell(m.getXPosition(),colum-1)!=Player.None){  //Field used
             return false;
         }
         //-----Move is valid----
         //Get y Position (colum)
         int counter=0;
-        while(gameBoard.getCell(m.getColumn(),counter)!=Player.None){
+        while(gameBoard.getCell(m.getXPosition(),counter)!=Player.None){
             counter++;
         }
-        xCurrent=m.getColumn();
+        xCurrent=m.getXPosition();
         yCurrent=counter;
         //insert Disc
 

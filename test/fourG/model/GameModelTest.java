@@ -272,6 +272,7 @@ public class GameModelTest {
         checkMove(myGame,mR);
         checkWinner(myGame,true);
         checkMove(myGame,mB);
+    }
    /* @Test
     public void testProcessMove() {
         System.out.println("processMove");
