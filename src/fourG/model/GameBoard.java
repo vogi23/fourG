@@ -45,6 +45,7 @@ public class GameBoard {
     public int getWidth(){
         return x;
     }
+    
     public int getHeight(){
         return y;
     }

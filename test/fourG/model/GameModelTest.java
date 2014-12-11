@@ -273,6 +273,74 @@ public class GameModelTest {
         checkWinner(myGame,true);
         checkMove(myGame,mB);
     }
+    
+    @Test
+    public void testInvalidMove1(){
+        System.out.println("---------testInvalidMove1---------");
+        GameModel myGame = new GameModel();
+        Move mR = new Move(5);
+        mR.setPlayer(Player.Red);
+        Move mB = new Move(5);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);//0
+        checkMove(myGame,mB);
+        checkMove(myGame,mR);//2
+        checkMove(myGame,mB);
+        checkMove(myGame,mR);//4
+        checkMove(myGame,mB);//5
+        boolean expResult=false;
+        boolean result= myGame.processMove(mR);
+        assertEquals(expResult, result);
+        if(expResult!=result){
+            fail("Move Red konnte nicht eingefügt werden");
+        }
+        mR = new Move(2);
+        mR.setPlayer(Player.Red);
+        checkMove(myGame,mR);
+        result= myGame.processMove(mR);
+        assertEquals(expResult, result);
+        if(expResult!=result){
+            fail("Move Red konnte nicht eingefügt werden");
+        }
+    }     
+        
+    @Test
+    public void testInvalidMove2(){ 
+        boolean expResult=false;
+        boolean result=false;
+        System.out.println("---------testInvalidMove2---------");
+        GameModel myGame = new GameModel();
+        Move mR = new Move(5);
+        mR.setPlayer(Player.Red);
+        Move mB = new Move(5);
+        checkMove(myGame,mR);
+        result= myGame.processMove(mR);
+        assertEquals(expResult, result);
+        if(expResult!=result){
+            fail("Move Red konnte nicht eingefügt werden");
+        }
+    }
+    
+        @Test
+    public void testInvalidMove3(){ 
+        boolean expResult=false;
+        boolean result=false;
+        System.out.println("---------testInvalidMove3---------");
+        GameModel myGame = new GameModel();
+        Move mR = new Move(7);
+        mR.setPlayer(Player.Red);
+        result= myGame.processMove(mR);
+        assertEquals(expResult, result);
+        if(expResult!=result){
+        }
+        
+        mR = new Move(-1);
+        mR.setPlayer(Player.Red);
+        result= myGame.processMove(mR);
+        assertEquals(expResult, result);
+        if(expResult!=result){
+        }
+    }
    /* @Test
     public void testProcessMove() {
         System.out.println("processMove");

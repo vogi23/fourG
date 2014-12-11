@@ -71,6 +71,9 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         if(m.getPlayer()!=nextPlayer){                   //wrong Player
             return false;
         }
+        if(row<=m.getXPosition() || m.getXPosition()<0){
+            return false;
+        }
         if(gameBoard.getCell(m.getXPosition(),colum-1)!=Player.None){  //Field used
             return false;
         }
@@ -103,7 +106,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     public Move getLastMove() {
         Move dummy=new Move(xCurrent);
         dummy.setPlayer(currentPlayer);
-        dummy.setYPosition(yCurrent);
+        dummy.setYPosition(colum-(yCurrent+1));
         return dummy;
     }
 
