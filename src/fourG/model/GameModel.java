@@ -53,6 +53,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         winner=Player.None;
         yCurrent=-1;
         xCurrent=-1;
+        
         //Init Objects
         observers = new HashSet<IModelObserver>();
         gameoffers = new ArrayList<GameOffer>();
@@ -61,8 +62,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     }
      
     @Override
-    public boolean processMove(Move m) {
-        //returnVar, true if move is valid
+    public boolean processMove(Move m) {                //returnVar, true if move is valid
         //Validate Move
         gameBoard.printArray();
         if(m==null){                                     //MoveObject empty
@@ -125,6 +125,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
             }
             if(counter>=winValue-1){
                 winner=currentPlayer;
+                state=ModelState.GameOver;  
                 return true;        //y Win
             }
         }
@@ -143,11 +144,47 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         }
         if(counter>=winValue-1){
                 winner=currentPlayer;
+                state=ModelState.GameOver;  
                 return true;        //x Win
         }
         
-        //check diag (direction right)
-        state=ModelState.GameOver;         //CHECK IT
+        //check diag (direction rightUp to leftDown)   
+        counter=0;
+        counterLeft=1;
+        counterRight=1;
+        while(counter<winValue-1 && 0<=xCurrent-counterLeft && colum>yCurrent+counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent+counterLeft)==currentPlayer){
+                counterLeft++;
+                counter++;
+        }
+        while(counter<winValue-1 && row>xCurrent+counterRight && 0<=yCurrent-counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent-counterRight)==currentPlayer){
+                counterRight++;
+                counter++;
+        }
+        if(counter>=winValue-1){
+                winner=currentPlayer;
+                state=ModelState.GameOver;  
+                return true;        //x Win
+        }
+        
+        //check diag (direction leftUp to rigthDown)   
+        counter=0;
+        counterLeft=1;
+        counterRight=1;
+        while(counter<winValue-1 && 0<=xCurrent-counterLeft && 0<=yCurrent-counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent-counterLeft)==currentPlayer){
+                counterLeft++;
+                counter++;
+        }
+        while(counter<winValue-1 && row>xCurrent+counterRight && colum>yCurrent+counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent+counterRight)==currentPlayer){
+                counterRight++;
+                counter++;
+        }
+        if(counter>=winValue-1){
+                winner=currentPlayer;
+                state=ModelState.GameOver;  
+                return true;        //x Win
+        }
+        
+        //--------No Winner--------
         return false;
     }
 

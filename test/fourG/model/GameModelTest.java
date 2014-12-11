@@ -138,9 +138,6 @@ public class GameModelTest {
         Move mB = new Move(5);
         mB.setPlayer(Player.Blue);
         GameModel myGame = new GameModel();
-        boolean expResult = true;
-        boolean result;
-        
         checkMove(myGame,mR);
         checkWinner(myGame,false);
         checkMove(myGame,mB);
@@ -165,6 +162,116 @@ public class GameModelTest {
         }
          assertEquals(expResult, result);
     }
+    
+    
+    @Test
+    public void testDiagRigthUptoLeftDown1(){
+        System.out.println("---------testDiagRigthUptoLeftDown1---------");
+        GameModel myGame = new GameModel();
+        Move mR = new Move(2);
+        mR.setPlayer(Player.Red);
+        Move mB = new Move(3);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(1);
+        mR.setPlayer(Player.Red);
+        mB = new Move(2);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(1);
+        mR.setPlayer(Player.Red);
+        mB = new Move(0);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(0);
+        mR.setPlayer(Player.Red);
+        mB = new Move(1);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(0);
+        mR.setPlayer(Player.Red);
+        mB = new Move(0);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,true);
+        checkMove(myGame,mR);
+    }
+    
+    
+    @Test
+    public void testDiagLeftUptoRightDown1(){
+        System.out.println("---------testDiagRigthUptoLeftDown1---------");
+        GameModel myGame = new GameModel();
+        Move mR = new Move(5);
+        mR.setPlayer(Player.Red);
+        Move mB = new Move(5);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(4);
+        mR.setPlayer(Player.Red);
+        mB = new Move(5);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(5);
+        mR.setPlayer(Player.Red);
+        mB = new Move(4);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(4);
+        mR.setPlayer(Player.Red);
+        mB = new Move(3);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(2);
+        mR.setPlayer(Player.Red);
+        mB = new Move(1);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,false);
+        checkMove(myGame,mB);
+        checkWinner(myGame,false);
+        
+        mR = new Move(3);
+        mR.setPlayer(Player.Red);
+        mB = new Move(1);
+        mB.setPlayer(Player.Blue);
+        checkMove(myGame,mR);
+        checkWinner(myGame,true);
+        checkMove(myGame,mB);
    /* @Test
     public void testProcessMove() {
         System.out.println("processMove");
