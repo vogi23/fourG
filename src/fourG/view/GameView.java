@@ -13,6 +13,7 @@ import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
 import java.awt.Graphics;
+import java.net.InetAddress;
 
 /**
  * To-Do-List: - Farbe des Spielers auslesen - yPosition des Moves richtig

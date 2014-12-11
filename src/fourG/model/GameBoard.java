@@ -6,6 +6,7 @@
 
 package fourG.model;
 
+import fourG.base.Move;
 import fourG.base.Player;
 
 /**
@@ -48,6 +49,10 @@ public class GameBoard {
     
     public int getHeight(){
         return y;
+    }
+    
+    public boolean isMoveValid(Move move) {
+        return myPlayField[move.getXPosition()][y] == Player.None;
     }
     
     public void printArray(){
