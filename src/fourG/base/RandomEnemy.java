@@ -22,6 +22,8 @@ public class RandomEnemy extends Enemy {
     public RandomEnemy(IGameModelInformations gamemodel, IGameControlUpdates gamecontroller) {
         super(gamemodel, gamecontroller);
         random = new Random();
+        
+        gameC.enemyReady();
     }
 
     @Override
