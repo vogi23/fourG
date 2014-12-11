@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class Move implements Serializable{
     
     private int column;
+    private int y;
     private Player player = Player.None;
             
     public Move(int col){
@@ -33,4 +34,11 @@ public class Move implements Serializable{
     public Player getPlayer(){
         return player;
     }
+    
+   public void setYPosition(int pY){
+       y=pY;
+   }
+    public int getPosition(int pY){
+       return y;
+   }
 }
