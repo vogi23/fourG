@@ -67,7 +67,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     private void startGame(){
         model.setState(ModelState.Playing);
         
-        
+        /*
         synchronized(consoleLock){ 
             System.out.println("FOR TESTING: sumbit 3 Moves on random Columns every 500ms");
         }
@@ -82,6 +82,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
                 Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        */
     }
     
     /**
@@ -138,6 +139,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         
         // Check if game is over
         if(model.isGameover()){
+            System.out.println("WIIIIINNNEEEEERRRRRR: "+model.getWinner());
             //TODO  kill enemy (close Sockets ....)
         }
     }

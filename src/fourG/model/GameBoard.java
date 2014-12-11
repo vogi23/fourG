@@ -52,7 +52,7 @@ public class GameBoard {
     }
     
     public boolean isMoveValid(Move move) {
-        return myPlayField[move.getXPosition()][y] == Player.None;
+        return myPlayField[move.getXPosition()][y-1] == Player.None;
     }
     
     public void printArray(){

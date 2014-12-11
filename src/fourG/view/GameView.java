@@ -215,7 +215,7 @@ public class GameView extends JFrame implements IModelObserver {
         Graphics g = fourGInterface.getGraphics();
         Move lastMove = model.getLastMove();
         g.setColor(lastMove.getPlayerColor());
-        System.out.println(lastMove);
+        System.out.println("GUI.drawCircle "+lastMove);
         int xPos = (lastMove.getXPosition()*100);
         int yPos = (lastMove.getYPosition()*100);           
         g.drawOval(xPos + 25, yPos + 25, 50, 50);

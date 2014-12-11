@@ -1,8 +1,8 @@
 package fourG.controlling;
 
 
-import fourG.base.LocalEnemy;
 import fourG.base.Player;
+import fourG.base.RandomEnemy;
 import fourG.base.RemoteEnemy;
 import fourG.model.GameModel;
 import fourG.model.ModelState;
@@ -88,7 +88,7 @@ public class MgmtController {
         gameM.setState(ModelState.PreparingEnemy);
         
         // Create Enemy
-        gameC.setEnemy(new LocalEnemy(this.gameM,this.gameC));
+        gameC.setEnemy(new RandomEnemy(this.gameM,this.gameC));
     }
     
     /**
