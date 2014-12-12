@@ -1,9 +1,9 @@
 package fourG.base;
 
 import fourG.controlling.GameController;
+import fourG.model.AIGameModel;
 import fourG.model.GameModel;
-import fourG.model.IGameModelInformations;
-import fourG.model.IModelObserver;
+import java.util.ArrayList;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,10 +16,14 @@ import fourG.model.IModelObserver;
  * @author vogi23
  */
 public class LocalEnemy extends Enemy implements IEnemy {
+	private AIGameModel gameModel;
+	private final int MAX_DEPTH = 5;
+    private final Player me = Player.Blue;
 
     public LocalEnemy(GameModel gamemodel, GameController gamecontroller){
         super(gamemodel, gamecontroller);
         
+	this.gameModel = new AIGameModel(gamemodel.getBoard());
         gameC.enemyReady();
     }
 
@@ -30,11 +34,36 @@ public class LocalEnemy extends Enemy implements IEnemy {
      */
     @Override
     public void receiveMove(Move m) {
+        ArrayList<Integer> possibleMoves = gameModel.getPossibleMoves();
+        int maxValue = 0;
+        int bestMove = -1;
 
-        // Move already processed by local GameModel. KI can access directly local GameModel and react with a move
+	    for (Integer possibleMove : possibleMoves) {
+		    int value = evaluateMove(possibleMove, 0, MAX_DEPTH);
+		    if (value > maxValue) {
+                bestMove = possibleMove;
+                maxValue = value;
+		    }
+	    }
 
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        super.gameC.receiveMove(new Move(bestMove));
     }
+
+	private int evaluateMove(Integer possibleMove, int value, int maxDepth) {
+        Move aMove = new Move(possibleMove);
+        boolean processMove = gameModel.processMove(aMove);
+        Player winner = gameModel.getWinner();
+        if (winner != Player.None) {
+            value = winner == me ? value + 1 : value -1;
+        } else if (maxDepth > 0 ) {
+            ArrayList<Integer> possibleMoves = gameModel.getPossibleMoves();
+            for (Integer move : possibleMoves) {
+                value = evaluateMove(move, value, --maxDepth);
+            }
+        }
+
+        return value;
+	}
     
     @Override
     public String getEnemyName(){
