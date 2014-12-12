@@ -43,16 +43,19 @@ public class GameView extends JFrame implements IModelObserver {
 
     JFrame gui;
     JPanel informationPanel = new JPanel();
-    JLabel yourName = new JLabel("I'm The Hero");
-    JLabel opponentName = new JLabel("Looser");
-    JLabel whoIsPlaying = new JLabel("ffhiggiw");
+    JLabel yourName = new JLabel();
+    JLabel opponentName = new JLabel();
+    JLabel whoIsPlaying = new JLabel();
     JPanel gamePanel = new JPanel();
-    JPanel fourGInterface = new JPanel();;
+    JPanel fourGInterface = new JPanel();
+    ;
     JPanel availableServers;
 
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
     JMenuItem menuFileNewLocal = new JMenuItem("New Local Game");
+    JMenuItem menuFileNewLocalRandom = new JMenuItem("Game against Computer: Easy");
+    JMenuItem menuFileNewLocalKI = new JMenuItem("Game against Computer: Hard");
     JMenuItem menuFileNewOnline = new JMenuItem("New Online Game");
     JMenuItem menuFileJoinOnline = new JMenuItem("Join Online Game");
     JMenuItem menuFileSave = new JMenuItem("Save Game");
@@ -85,12 +88,21 @@ public class GameView extends JFrame implements IModelObserver {
     }
 
     private void createMenu() {
-        menuFile.add(menuFileNewLocal);
-        menuFileNewLocal.addActionListener(
+        menuFile.add(menuFileNewLocalKI);
+        menuFile.addSeparator();
+        menuFileNewLocalKI.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mgmt.initLocalGame();
+                        mgmt.initLocalGame(true);
+                    }
+                });
+        menuFile.add(menuFileNewLocalRandom);
+        menuFileNewLocalRandom.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        mgmt.initLocalGame(false);
                     }
                 });
         menuFile.addSeparator();
@@ -140,6 +152,13 @@ public class GameView extends JFrame implements IModelObserver {
                     }
                 });
         menuOptions.add(setOptions);
+        setOptions.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        yourName.setText("Test");
+                    }
+                });
         menuBar.add(menuFile);
         menuBar.add(menuOptions);
         setJMenuBar(menuBar);
@@ -153,8 +172,7 @@ public class GameView extends JFrame implements IModelObserver {
         yourName.setBounds(5, 5, 400, 25);
         opponentName.setBounds(5, 65, 400, 25);
         whoIsPlaying.setBounds(5, 125, 400, 25);
-        
-        
+
         informationPanel.add(yourName);
         informationPanel.add(opponentName);
         informationPanel.add(whoIsPlaying);
@@ -179,13 +197,13 @@ public class GameView extends JFrame implements IModelObserver {
                     }
                 });
     }
-    
-    private void insertOwnInformation(){
+
+    private void insertOwnInformation() {
         yourName.setText("Test");
     }
-    
+
     private void insertInformation() {
-        
+        whoIsPlaying.setText(model.getCurrentPlayer().toString());
         opponentName.setText(game.getEnemyName());
     }
 
@@ -232,7 +250,6 @@ public class GameView extends JFrame implements IModelObserver {
         }
     }
 
-
     private void printGameOffers() {
         clearGameOffer();
         ArrayList<GameOffer> gameoffers = model.getGameOffers();
@@ -259,7 +276,7 @@ public class GameView extends JFrame implements IModelObserver {
     private void clearGameOffer() {
         availableServers.removeAll();
     }
-    
+
     @Override
     public void update() {
         switch (model.getState()) {

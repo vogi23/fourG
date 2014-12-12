@@ -15,6 +15,6 @@ public class Game {
 
     public static void main(String[] args) {
         MgmtController mgmt = new MgmtController();
-        mgmt.initLocalGame();
+        mgmt.initLocalGame(false);
     }
 }
