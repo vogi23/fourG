@@ -45,6 +45,7 @@ public class GameView extends JFrame implements IModelObserver {
     JPanel informationPanel = new JPanel();
     JLabel yourName = new JLabel("I'm The Hero");
     JLabel opponentName = new JLabel("Looser");
+    JLabel whoIsPlaying = new JLabel("ffhiggiw");
     JPanel gamePanel = new JPanel();
     JPanel fourGInterface = new JPanel();;
     JPanel availableServers;
@@ -151,9 +152,12 @@ public class GameView extends JFrame implements IModelObserver {
         informationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         yourName.setBounds(5, 5, 400, 25);
         opponentName.setBounds(5, 65, 400, 25);
-
+        whoIsPlaying.setBounds(5, 125, 400, 25);
+        
+        
         informationPanel.add(yourName);
         informationPanel.add(opponentName);
+        informationPanel.add(whoIsPlaying);
 
         // Panel for searching servers
         availableServers = new JPanel();
@@ -171,7 +175,6 @@ public class GameView extends JFrame implements IModelObserver {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         int xPosition = e.getX();
-                        int yPosition = e.getY();
                         calculateRow(xPosition);
                     }
                 });
@@ -229,21 +232,6 @@ public class GameView extends JFrame implements IModelObserver {
         }
     }
 
-    @Override
-    public void update() {
-        // Move lastMove; // For drawCircle
-        switch (model.getState()) {
-            case Playing:
-                insertInformation();
-                drawCircle();
-                break;
-            case SearchOnlineGames:
-                System.out.println("printgameoffers");
-                printGameOffers();
-                break;
-        }
-
-    }
 
     private void printGameOffers() {
         clearGameOffer();
@@ -270,5 +258,20 @@ public class GameView extends JFrame implements IModelObserver {
 
     private void clearGameOffer() {
         availableServers.removeAll();
+    }
+    
+    @Override
+    public void update() {
+        switch (model.getState()) {
+            case Playing:
+                insertInformation();
+                drawCircle();
+                break;
+            case SearchOnlineGames:
+                System.out.println("printgameoffers");
+                printGameOffers();
+                break;
+        }
+
     }
 }
