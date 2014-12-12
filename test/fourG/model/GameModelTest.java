@@ -64,6 +64,7 @@ public class GameModelTest {
         Move mB = new Move(4);
         mB.setPlayer(Player.Blue);
         GameModel myGame = new GameModel();
+        myGame.setState(ModelState.Playing);
         boolean expResult = true;
         boolean result;
         
@@ -109,7 +110,6 @@ public class GameModelTest {
         mB = setMove(2,Player.Blue);
         checkMove(myGame,mB);
         checkWinner(myGame,true);
-        checkMove(myGame,mR);
     }
     
     public void checkMove(GameModel myGame, Move m){
@@ -136,6 +136,7 @@ public class GameModelTest {
         Move mB = new Move(5);
         mB.setPlayer(Player.Blue);
         GameModel myGame = new GameModel();
+        myGame.setState(ModelState.Playing);
         checkMove(myGame,mR);
         checkWinner(myGame,false);
         checkMove(myGame,mB);
@@ -150,7 +151,6 @@ public class GameModelTest {
         }
         checkMove(myGame,mR);
         checkWinner(myGame,true);
-        checkMove(myGame,mB);
     }
     
     public void checkWinner(GameModel myGame,boolean expResult){
@@ -166,6 +166,7 @@ public class GameModelTest {
     public void testDiagRigthUptoLeftDown1(){
         System.out.println("---------testDiagRigthUptoLeftDown1---------");
         GameModel myGame = new GameModel();
+        myGame.setState(ModelState.Playing);
         Move mR = new Move(2);
         mR.setPlayer(Player.Red);
         Move mB = new Move(3);
@@ -210,7 +211,6 @@ public class GameModelTest {
         checkWinner(myGame,false);
         checkMove(myGame,mB);
         checkWinner(myGame,true);
-        checkMove(myGame,mR);
     }
     
     
@@ -218,6 +218,7 @@ public class GameModelTest {
     public void testDiagLeftUptoRightDown1(){
         System.out.println("---------testDiagRigthUptoLeftDown1---------");
         GameModel myGame = new GameModel();
+        myGame.setState(ModelState.Playing);
         Move mR = new Move(5);
         mR.setPlayer(Player.Red);
         Move mB = new Move(5);
@@ -269,13 +270,13 @@ public class GameModelTest {
         mB.setPlayer(Player.Blue);
         checkMove(myGame,mR);
         checkWinner(myGame,true);
-        checkMove(myGame,mB);
     }
     
     @Test
     public void testInvalidMove1(){
         System.out.println("---------testInvalidMove1---------");
         GameModel myGame = new GameModel();
+        myGame.setState(ModelState.Playing);
         Move mR = new Move(5);
         mR.setPlayer(Player.Red);
         Move mB = new Move(5);
@@ -308,6 +309,7 @@ public class GameModelTest {
         boolean result=false;
         System.out.println("---------testInvalidMove2---------");
         GameModel myGame = new GameModel();
+        myGame.setState(ModelState.Playing);
         Move mR = new Move(5);
         mR.setPlayer(Player.Red);
         Move mB = new Move(5);
@@ -325,6 +327,7 @@ public class GameModelTest {
         boolean result=false;
         System.out.println("---------testInvalidMove3---------");
         GameModel myGame = new GameModel();
+        myGame.setState(ModelState.Playing);
         Move mR = new Move(7);
         mR.setPlayer(Player.Red);
         result= myGame.processMove(mR);
