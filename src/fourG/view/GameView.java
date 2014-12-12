@@ -205,7 +205,7 @@ public class GameView extends JFrame implements IModelObserver {
 
     private void insertInformation() {
         whoIsPlaying.setText("Spieler mit Farbe " + model.getCurrentPlayer().toString() + " ist am Zug.");
-        opponentName.setText(game.getEnemyName());
+        opponentName.setText("Sie spielen gegen: " +game.getEnemyName());
     }
 
     private void onFileExit() {
