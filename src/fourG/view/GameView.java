@@ -6,7 +6,6 @@ import fourG.controlling.GameController;
 import fourG.model.GameOffer;
 import fourG.model.IGameModelInformations;
 import fourG.model.IModelObserver;
-import fourG.model.ModelState;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -175,32 +174,12 @@ public class GameView extends JFrame implements IModelObserver {
         fourGInterface.setPreferredSize(new Dimension(gamePanelWidth, gamePanelHeight));
         fourGInterface.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
         fourGInterface.addMouseListener(
-                new MouseListener() {
+                new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         int xPosition = e.getX();
                         int yPosition = e.getY();
                         calculateRow(xPosition);
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                     }
                 });
     }
