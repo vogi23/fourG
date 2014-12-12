@@ -268,7 +268,7 @@ public class RemoteEnemy extends Enemy {
     }
     
     @Override
-    public String getName(){
+    public String getEnemyName(){
         if(enemyAddr == null){
             return "kein Gegner verbunden";
         }

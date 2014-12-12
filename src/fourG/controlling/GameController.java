@@ -155,6 +155,6 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         if(enemy == null){
             return "kein Gegner erstellt";
         }
-        return enemy.getName();
+        return enemy.getEnemyName();
     }
 }
