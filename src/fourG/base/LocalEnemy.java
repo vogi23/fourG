@@ -15,7 +15,7 @@ import fourG.model.IModelObserver;
  *
  * @author vogi23
  */
-public class LocalEnemy extends Enemy implements IEnemy, IModelObserver {
+public class LocalEnemy extends Enemy implements IEnemy {
 
     public LocalEnemy(GameModel gamemodel, GameController gamecontroller){
         super(gamemodel, gamecontroller);
@@ -35,16 +35,9 @@ public class LocalEnemy extends Enemy implements IEnemy, IModelObserver {
 
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-	@Override
-	public void update() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-        
-    
     
     @Override
-    public String getName(){
+    public String getEnemyName(){
         return "Schlauer Gegner";
     }
 }

@@ -35,7 +35,7 @@ public class RandomEnemy extends Enemy {
     }
     
     @Override
-    public String getName(){
+    public String getEnemyName(){
         return "Tubeli Gegner";
     }
 }
