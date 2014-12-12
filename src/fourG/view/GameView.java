@@ -5,6 +5,7 @@ import fourG.controlling.MgmtController;
 import fourG.controlling.GameController;
 import fourG.model.IGameModelInformations;
 import fourG.model.IModelObserver;
+import fourG.model.ModelState;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -36,8 +37,8 @@ public class GameView extends JFrame implements IModelObserver {
     private MgmtController mgmt;
     private GameController game;
     private IGameModelInformations model;
-    private int gamePanelHeight = 600;
-    private int gamePanelWidth = 700;
+    private int gamePanelHeight = 599;
+    private int gamePanelWidth = 699;
 
     JFrame gui;
     JPanel informationPanel = new JPanel();
@@ -47,7 +48,7 @@ public class GameView extends JFrame implements IModelObserver {
     JLabel opponentIP = new JLabel("256.256.256.256");
     JPanel gamePanel = new JPanel();
     JPanel fourGInterface;
-    
+
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
     JMenuItem menuFileNewLocal = new JMenuItem("New Local Game");
@@ -82,8 +83,6 @@ public class GameView extends JFrame implements IModelObserver {
         super.paint(g);
         drawInterface(); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
 
     private void createMenu() {
         menuFile.add(menuFileNewLocal);
@@ -190,7 +189,6 @@ public class GameView extends JFrame implements IModelObserver {
                     }
                 });
     }
-    
 
     private void onFileExit() {
         System.exit(10);
@@ -211,19 +209,6 @@ public class GameView extends JFrame implements IModelObserver {
         return xCurrent;
     }
 
-    private void drawCircle() {
-        Graphics g = fourGInterface.getGraphics();
-        Move lastMove = model.getLastMove();
-        g.setColor(lastMove.getPlayerColor());
-        System.out.println(lastMove);
-        int xPos = (lastMove.getXPosition()*100);
-        int yPos = (lastMove.getYPosition()*100);           
-        g.drawOval(xPos + 25, yPos + 25, 50, 50);
-        g.fillOval(xPos + 25, yPos + 25, 50, 50);
-    }
-    
-
-
     private void drawInterface() {
         Graphics g = fourGInterface.getGraphics();
         g.setColor(Color.blue);
@@ -237,9 +222,24 @@ public class GameView extends JFrame implements IModelObserver {
         }
     }
 
+    private void drawCircle() {
+        Graphics g = fourGInterface.getGraphics();
+        Move lastMove = model.getLastMove();
+        g.setColor(lastMove.getPlayerColor());
+        System.out.println(lastMove);
+        int xPos = (lastMove.getXPosition() * 100);       //Skalierung mit Pixeln anpassen
+        int yPos = (lastMove.getYPosition() * 100);
+        g.drawOval(xPos + 25, yPos + 25, 50, 50);       //Positionierung des Kreises zentrieren.
+        g.fillOval(xPos + 25, yPos + 25, 50, 50);
+    }
+
     @Override
     public void update() {
-        // Move lastMove; // For drawCircle
+       /** ModelState modelState = model.getState();
+        if (modelState == modelState.Playing) {
+            drawCircle();
+        } else {
+        } */
         drawCircle();
     }
 }
