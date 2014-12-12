@@ -112,7 +112,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     public boolean receiveMove(Move m){
         
         if(model.getState() != ModelState.Playing){
-            return false;
+            return true;
         }
         
         // Process move. return false if invalid.
