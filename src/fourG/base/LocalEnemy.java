@@ -40,4 +40,11 @@ public class LocalEnemy extends Enemy implements IEnemy, IModelObserver {
 	public void update() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+        
+    
+    
+    @Override
+    public String getName(){
+        return "Schlauer Gegner";
+    }
 }
