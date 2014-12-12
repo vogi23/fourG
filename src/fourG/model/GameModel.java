@@ -82,7 +82,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         }
         if(state!=ModelState.Playing){
             if(state==ModelState.GameOver){
-                System.out.println("Player "+lastPlayer+" hat bereits Gewonnen!");
+                System.out.println("Player "+winner+" hat bereits Gewonnen!");
             }
             else{
                 System.out.println("Der State ist nicht Playing, er ist: "+state);
