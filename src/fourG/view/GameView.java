@@ -272,6 +272,5 @@ public class GameView extends JFrame implements IModelObserver {
                 printGameOffers();
                 break;
         }
-
     }
 }

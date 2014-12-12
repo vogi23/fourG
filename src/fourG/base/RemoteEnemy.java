@@ -117,6 +117,7 @@ public class RemoteEnemy extends Enemy {
         try{
             DatagramSocket client = new DatagramSocket();
             client.setBroadcast(true);
+            client.setSoTimeout(400);
             
             byte[] outData = "DISCOVER_FOURG_ENEMY".getBytes();
             
@@ -153,11 +154,14 @@ public class RemoteEnemy extends Enemy {
             
             
             // Receive response
+            System.out.println("UDP Broadcast sent");
             while(true){
                 byte[] recvBuf = new byte[15000];
                 DatagramPacket receivePacket = new DatagramPacket(recvBuf, recvBuf.length);
                 String message;
+                System.out.println("UDP Broadcast waiting for answer");
                 client.receive(receivePacket);
+                System.out.println("UDP Broadcast answer received");
                 synchronized(getConsoleLockObject()){
                     System.out.println("JOINER Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
                 
