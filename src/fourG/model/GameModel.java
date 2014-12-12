@@ -99,6 +99,10 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
             currentPlayer=Player.Blue;
         }
         broadcastUpdate();
+        if (isGameover()){
+            System.out.println("Der Player "+currentPlayer+" hat gewonnen!------" );
+            
+        }
         return true;    
     }
 

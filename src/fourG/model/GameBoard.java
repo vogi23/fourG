@@ -54,7 +54,7 @@ public class GameBoard {
     public void printArray(){
         String shortPlayCol="";
          for(int i=y-1;i>=0;i--){
-            for(int j=x-1;j>=0;j--){
+            for(int j=0;j<x;j++){
                 if(myPlayField[j][i]==Player.None){
                     shortPlayCol="[/]";
                 }
