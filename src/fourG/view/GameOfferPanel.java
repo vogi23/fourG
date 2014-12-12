@@ -23,13 +23,16 @@ public class GameOfferPanel extends JPanel{
             
     public GameOfferPanel(GameOffer go, int y){
         this.go = go;
-        this.label = new JLabel(go.getAddress().toString());
+        this.label = new JLabel();
+        this.label.setText(go.getAddress().toString());
         this.add(label);
         
-        setBounds(0, y*25,400, 25);
+        setBounds(0, y*26,400, 25);
         
         setBorder(BorderFactory.createLineBorder(Color.black));
         setBackground(Color.green);
+        
+        repaint();
     }
     
     public GameOffer getOffer(){

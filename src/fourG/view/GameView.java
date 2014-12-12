@@ -261,7 +261,6 @@ public class GameView extends JFrame implements IModelObserver {
                 public void mouseClicked(MouseEvent e) {
                     GameOffer o = ((GameOfferPanel) e.getSource()).getOffer();
                     game.joinGame(o);
-                    System.out.println("join");
                 }
             });
 
