@@ -3,6 +3,7 @@ package fourG.view;
 import fourG.base.Move;
 import fourG.controlling.MgmtController;
 import fourG.controlling.GameController;
+import fourG.model.GameOffer;
 import fourG.model.IGameModelInformations;
 import fourG.model.IModelObserver;
 import java.awt.BorderLayout;
@@ -13,6 +14,11 @@ import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
 import java.awt.Graphics;
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+import java.util.Iterator;
+>>>>>>> e8e7183ad288ef80a1cea5616b3c0bab630d24c7
 
 /**
  * To-Do-List: - Farbe des Spielers auslesen - yPosition des Moves richtig
@@ -46,7 +52,8 @@ public class GameView extends JFrame implements IModelObserver {
     JLabel opponentIP = new JLabel("256.256.256.256");
     JPanel gamePanel = new JPanel();
     JPanel fourGInterface;
-
+    JPanel availableServers;
+    
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
     JMenuItem menuFileNewLocal = new JMenuItem("New Local Game");
@@ -146,12 +153,24 @@ public class GameView extends JFrame implements IModelObserver {
     private void createInterface() {
         setLayout(new GridLayout(1, 2));
         add(informationPanel);
-        informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.Y_AXIS));
+        informationPanel.setLayout(null);
         informationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        yourName.setBounds(5, 5, 400, 25);
+        yourIP.setBounds(5, 35, 400, 25);
+        opponentName.setBounds(5, 65, 400, 25);
+        opponentIP.setBounds(5, 95, 400, 25);
         informationPanel.add(yourName);
         informationPanel.add(yourIP);
         informationPanel.add(opponentName);
         informationPanel.add(opponentIP);
+        
+        // Panel for searching servers
+        this.availableServers = new JPanel();
+        availableServers.setBounds(30, 200, 500, 300);
+        availableServers.setBackground(Color.red);
+        informationPanel.add(availableServers);
+        
+        
         add(gamePanel);
         gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
@@ -213,11 +232,45 @@ public class GameView extends JFrame implements IModelObserver {
 
     @Override
     public void update() {
-       /** ModelState modelState = model.getState();
-        if (modelState == modelState.Playing) {
-            drawCircle();
-        } else {
-        } */
-        drawCircle();
+        // Move lastMove; // For drawCircle
+        switch(model.getState()){
+            case Playing :
+                drawCircle();
+            break;
+            case SearchOnlineGames :
+                System.out.println("printgameoffers");
+                printGameOffers();
+            break;
+        }
+        
+    }
+    
+    private void printGameOffers(){
+        clearGameOffer(); 
+        ArrayList<GameOffer> gameoffers = model.getGameOffers();
+        Iterator<GameOffer> i = gameoffers.iterator();
+        while(i.hasNext()){
+            GameOffer go = i.next();
+            GameOfferPanel offer;
+            synchronized(availableServers.getTreeLock()){
+                offer = new GameOfferPanel(go, availableServers.getComponentCount());
+            }
+            availableServers.add(offer);
+            offer.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    GameOffer o = ((GameOfferPanel) e.getSource()).getOffer();
+                    game.joinGame(o);
+                    System.out.println("join");
+                }
+            });
+            
+            
+            repaint();
+        }
+    }
+    
+    private void clearGameOffer(){
+        availableServers.removeAll();
     }
 }

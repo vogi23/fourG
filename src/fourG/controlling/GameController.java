@@ -148,8 +148,8 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     @Override
     public void offerGame(GameOffer o){
         model.addGameOffer(o);
-        joinGame(o); // auto join first GameOffer for TESTING! Normally joinGame would be called from GameView;
     }
+   
 
     @Override
     public void reDiscoverEnemys() {
