@@ -150,9 +150,7 @@ public class GameView extends JFrame implements IModelObserver {
         informationPanel.setLayout(null);
         informationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         yourName.setBounds(5, 5, 400, 25);
-        yourIP.setBounds(5, 35, 400, 25);
         opponentName.setBounds(5, 65, 400, 25);
-        opponentIP.setBounds(5, 95, 400, 25);
 
         informationPanel.add(yourName);
         informationPanel.add(opponentName);
