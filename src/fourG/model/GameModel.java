@@ -20,7 +20,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     
     //Playdata
     private Player nextPlayer;
-    private Player currentPlayer;
+    private Player lastPlayer;
     private Player winner;
     private int yCurrent;
     private int xCurrent;
@@ -51,7 +51,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         
         //Init Playdata
         nextPlayer=Player.Red;
-        currentPlayer=Player.None;
+        lastPlayer=Player.None;
         winner=Player.None;
         yCurrent=-1;
         xCurrent=-1;
@@ -82,7 +82,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         }
         if(state!=ModelState.Playing){
             if(state==ModelState.GameOver){
-                System.out.println("Player "+currentPlayer+" hat bereits Gewonnen!");
+                System.out.println("Player "+lastPlayer+" hat bereits Gewonnen!");
             }
             else{
                 System.out.println("Der State ist nicht Playing, er ist: "+state);
@@ -105,15 +105,15 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         moveCounter++;
         if(m.getPlayer()==Player.Red){
             nextPlayer=Player.Blue;
-            currentPlayer=Player.Red;
+            lastPlayer=Player.Red;
         }
         else{
             nextPlayer=Player.Red;
-            currentPlayer=Player.Blue;
+            lastPlayer=Player.Blue;
         }
         broadcastUpdate();
         if (isGameover()){
-            System.out.println("Der Player "+currentPlayer+" hat gewonnen!------" );
+            System.out.println("Der Player "+lastPlayer+" hat gewonnen!------" );
             
         }
         return true;    
@@ -122,7 +122,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     @Override
     public Move getLastMove() {
         Move dummy=new Move(xCurrent);
-        dummy.setPlayer(currentPlayer);
+        dummy.setPlayer(lastPlayer);
         dummy.setYPosition(colum-(yCurrent+1));
         return dummy;
     }
@@ -139,12 +139,12 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         int counterDown=1;
         //check y
         if(yCurrent>=winValue-1){
-            while(counter<winValue-1 && gameBoard.getCell(xCurrent,yCurrent-counterDown)==currentPlayer){
+            while(counter<winValue-1 && gameBoard.getCell(xCurrent,yCurrent-counterDown)==lastPlayer){
                 counterDown++;
                 counter++;
             }
             if(counter>=winValue-1){
-                winner=currentPlayer;
+                winner=lastPlayer;
                 state=ModelState.GameOver;  
                 return true;        //y Win
             }
@@ -154,16 +154,16 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         counter=0;
         int counterLeft=1;
         int counterRight=1;
-        while(counter<winValue-1 && 0<=xCurrent-counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent)==currentPlayer){
+        while(counter<winValue-1 && 0<=xCurrent-counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent)==lastPlayer){
                 counterLeft++;
                 counter++;
         }
-        while(counter<winValue-1 && row>xCurrent+counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent)==currentPlayer){
+        while(counter<winValue-1 && row>xCurrent+counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent)==lastPlayer){
                 counterRight++;
                 counter++;
         }
         if(counter>=winValue-1){
-                winner=currentPlayer;
+                winner=lastPlayer;
                 state=ModelState.GameOver;  
                 return true;        //x Win
         }
@@ -172,16 +172,16 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         counter=0;
         counterLeft=1;
         counterRight=1;
-        while(counter<winValue-1 && 0<=xCurrent-counterLeft && colum>yCurrent+counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent+counterLeft)==currentPlayer){
+        while(counter<winValue-1 && 0<=xCurrent-counterLeft && colum>yCurrent+counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent+counterLeft)==lastPlayer){
                 counterLeft++;
                 counter++;
         }
-        while(counter<winValue-1 && row>xCurrent+counterRight && 0<=yCurrent-counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent-counterRight)==currentPlayer){
+        while(counter<winValue-1 && row>xCurrent+counterRight && 0<=yCurrent-counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent-counterRight)==lastPlayer){
                 counterRight++;
                 counter++;
         }
         if(counter>=winValue-1){
-                winner=currentPlayer;
+                winner=lastPlayer;
                 state=ModelState.GameOver;  
                 return true;        //x Win
         }
@@ -190,16 +190,16 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         counter=0;
         counterLeft=1;
         counterRight=1;
-        while(counter<winValue-1 && 0<=xCurrent-counterLeft && 0<=yCurrent-counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent-counterLeft)==currentPlayer){
+        while(counter<winValue-1 && 0<=xCurrent-counterLeft && 0<=yCurrent-counterLeft && gameBoard.getCell(xCurrent-counterLeft,yCurrent-counterLeft)==lastPlayer){
                 counterLeft++;
                 counter++;
         }
-        while(counter<winValue-1 && row>xCurrent+counterRight && colum>yCurrent+counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent+counterRight)==currentPlayer){
+        while(counter<winValue-1 && row>xCurrent+counterRight && colum>yCurrent+counterRight && gameBoard.getCell(xCurrent+counterRight,yCurrent+counterRight)==lastPlayer){
                 counterRight++;
                 counter++;
         }
         if(counter>=winValue-1){
-                winner=currentPlayer;
+                winner=lastPlayer;
                 state=ModelState.GameOver;  
                 return true;        //x Win
         }
@@ -220,7 +220,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
 
     @Override
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        return nextPlayer;
     }
     
     public void addModelObserver(IModelObserver obs){
