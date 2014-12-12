@@ -19,7 +19,8 @@ public class LocalEnemy extends Enemy implements IEnemy, IModelObserver {
 
     public LocalEnemy(GameModel gamemodel, GameController gamecontroller){
         super(gamemodel, gamecontroller);
-
+        
+        gameC.enemyReady();
     }
 
     /**

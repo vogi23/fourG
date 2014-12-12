@@ -51,10 +51,6 @@ public class GameBoard {
         return y;
     }
     
-    public boolean isMoveValid(Move move) {
-        return myPlayField[move.getXPosition()][y] == Player.None;
-    }
-    
     public void printArray(){
         String shortPlayCol="";
          for(int i=y-1;i>=0;i--){

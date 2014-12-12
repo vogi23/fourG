@@ -75,9 +75,8 @@ public class GameServer implements Runnable{
                 synchronized(enemy.getConsoleLockObject()){
                     System.out.println("GameServer: received move: "+m);
                 }
-                try{
-                    gameC.receiveMove((Move) m);
-                }catch(InvalidMoveException ime){
+                
+                if(!gameC.receiveMove((Move) m)){
                     confirmationOut.println("Remote GameServer: received MOVE could not be processed (invalid)");
                     confirmationOut.flush();
                     System.err.println("GameServer: received invalid move from enemy"+m);

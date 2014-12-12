@@ -209,6 +209,17 @@ public class GameView extends JFrame implements IModelObserver {
         return xCurrent;
     }
 
+    private void drawCircle() {
+        Graphics g = fourGInterface.getGraphics();
+        Move lastMove = model.getLastMove();
+        g.setColor(lastMove.getPlayerColor());
+        System.out.println("GUI.drawCircle "+lastMove);
+        int xPos = (lastMove.getXPosition()*100);
+        int yPos = (lastMove.getYPosition()*100);           
+        g.drawOval(xPos + 25, yPos + 25, 50, 50);
+        g.fillOval(xPos + 25, yPos + 25, 50, 50);
+    }
+
     private void drawInterface() {
         Graphics g = fourGInterface.getGraphics();
         g.setColor(Color.blue);
@@ -220,17 +231,6 @@ public class GameView extends JFrame implements IModelObserver {
             int xPos = (j * 100);
             g.drawLine(xPos, 0, xPos, 600);
         }
-    }
-
-    private void drawCircle() {
-        Graphics g = fourGInterface.getGraphics();
-        Move lastMove = model.getLastMove();
-        g.setColor(lastMove.getPlayerColor());
-        System.out.println(lastMove);
-        int xPos = (lastMove.getXPosition() * 100);       //Skalierung mit Pixeln anpassen
-        int yPos = (lastMove.getYPosition() * 100);
-        g.drawOval(xPos + 25, yPos + 25, 50, 50);       //Positionierung des Kreises zentrieren.
-        g.fillOval(xPos + 25, yPos + 25, 50, 50);
     }
 
     @Override

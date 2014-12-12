@@ -14,7 +14,7 @@ import fourG.model.GameOffer;
  * @author vogi23
  */
 public interface IGameControlUpdates {
-    public void receiveMove(Move m) throws InvalidMoveException ;
+    public boolean receiveMove(Move m);
     public void enemyReady();
     public void offerGame(GameOffer o);
     
