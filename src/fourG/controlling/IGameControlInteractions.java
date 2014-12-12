@@ -1,6 +1,7 @@
 package fourG.controlling;
 
 import fourG.base.Move;
+import fourG.base.Player;
 import fourG.model.GameOffer;
 
 /*
@@ -18,6 +19,7 @@ public interface IGameControlInteractions {
     public boolean makeMove(Move m);
     public void reDiscoverEnemys();
     public void joinGame(GameOffer o);
+    public Player getMyColor();
     
     public String getEnemyName();
     public Object getConsoleLockObject();

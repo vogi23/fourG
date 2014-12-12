@@ -41,6 +41,11 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     }
     
     @Override
+    public Player getMyColor(){
+        return iAm;
+    }
+    
+    @Override
     public Object getConsoleLockObject(){
         return consoleLock;
     }
