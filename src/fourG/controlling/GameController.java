@@ -77,6 +77,10 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     @Override
     public boolean makeMove(Move m){
         
+        if(model.getState() != ModelState.Playing){
+            return false;
+        }
+        
         // Process move. return false if invalid.
         m.setPlayer(iAm);
         synchronized(consoleLock){ 
@@ -95,10 +99,6 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         // Send valid move to enemy
         enemy.receiveMove(m);
                 
-        // Check if game is over
-        if(model.isGameover()){
-            //TODO kill enemy (close Sockets ....)
-        }
         return true;
     }
     
@@ -106,9 +106,14 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
      * Inform GameController about a move from an enemy
      * 
      * @param m 
+     * @return  
      */
     @Override
     public boolean receiveMove(Move m){
+        
+        if(model.getState() != ModelState.Playing){
+            return false;
+        }
         
         // Process move. return false if invalid.
         Player enemycolor = Player.Red;
