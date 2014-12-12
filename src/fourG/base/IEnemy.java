@@ -13,6 +13,6 @@ package fourG.base;
 public interface IEnemy {
     
     public void receiveMove(Move m);
-    public String getName();
+    public String getEnemyName();
     public void killSockets();
 }

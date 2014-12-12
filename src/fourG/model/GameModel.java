@@ -24,6 +24,8 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     private Player winner;
     private int yCurrent;
     private int xCurrent;
+    private int moveCounter;
+    private int maxInserts;
     
     //Size of gameBoard and 
     private int row;            //Zeile, waagerecht
@@ -53,7 +55,8 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         winner=Player.None;
         yCurrent=-1;
         xCurrent=-1;
-        
+        moveCounter=0;
+        maxInserts=pWidth*pHeight;
         //Init Objects
         observers = new HashSet<IModelObserver>();
         gameoffers = new ArrayList<GameOffer>();
@@ -93,7 +96,8 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
 
         gameBoard.setCell(xCurrent, yCurrent, m.getPlayer());
         //change Member
-        //ADD CODE HERE, change other Members like counter
+        // change Members like counter
+        moveCounter++;
         if(m.getPlayer()==Player.Red){
             nextPlayer=Player.Blue;
             currentPlayer=Player.Red;
@@ -189,13 +193,18 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
                 counterRight++;
                 counter++;
         }
-        if(counter>=winValue-1){
+        if(moveCounter>=winValue-1){
                 winner=currentPlayer;
                 state=ModelState.GameOver;  
                 return true;        //x Win
         }
-        
         //--------No Winner--------
+        //check draw
+        if(counter>=maxInserts){
+                winner=Player.Draw;
+                state=ModelState.GameOver;  
+                return true;        //x Win
+        }
         return false;
     }
 
