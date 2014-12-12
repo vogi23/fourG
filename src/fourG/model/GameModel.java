@@ -77,6 +77,9 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
         if(gameBoard.getCell(m.getXPosition(),colum-1)!=Player.None){  //Field used
             return false;
         }
+        if(state!=ModelState.Playing){
+            System.out.println("Player "+currentPlayer+" hat bereits Gewonnen!");
+        }
         //-----Move is valid----
         //Get y Position (colum)
         int counter=0;

@@ -66,9 +66,9 @@ public class GameBoard {
                 }
                 System.out.print(shortPlayCol);
             }
-         System.out.println();
+        System.out.println();
         }
-         System.out.println();
-         System.out.println();
+        System.out.println();
+        System.out.println();
     }
 }
