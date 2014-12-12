@@ -182,6 +182,7 @@ public class GameView extends JFrame implements IModelObserver {
     }
     
     private void insertInformation() {
+        
         opponentName.setText(game.getEnemyName());
     }
 

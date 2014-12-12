@@ -33,4 +33,9 @@ public class RandomEnemy extends Enemy {
              move = new Move(random.nextInt(7));
         }
     }
+    
+    @Override
+    public String getName(){
+        return "Tubeli Gegner";
+    }
 }
