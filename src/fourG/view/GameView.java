@@ -45,13 +45,13 @@ public class GameView extends JFrame implements IModelObserver {
 
     JFrame gui;
     JPanel informationPanel = new JPanel();
+    JPanel gamePanel = new JPanel();
+    JPanel fourGInterface = new JPanel();
+    JPanel availableServers;
     JLabel yourName = new JLabel();
     JLabel opponentName = new JLabel();
     JLabel whoIsPlaying = new JLabel();
-    JPanel gamePanel = new JPanel();
-    JPanel fourGInterface = new JPanel();
     JLabel yourColor = new JLabel();
-    JPanel availableServers;
 
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
@@ -79,7 +79,7 @@ public class GameView extends JFrame implements IModelObserver {
         pack();
         setVisible(true);
         setResizable(false);
-        insertOwnInformation()
+        insertOwnInformation();
     }
 
     @Override
