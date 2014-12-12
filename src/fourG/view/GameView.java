@@ -14,6 +14,8 @@ import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
 import java.awt.Graphics;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -48,7 +50,7 @@ public class GameView extends JFrame implements IModelObserver {
     JLabel whoIsPlaying = new JLabel();
     JPanel gamePanel = new JPanel();
     JPanel fourGInterface = new JPanel();
-    ;
+    JLabel yourColor = new JLabel();
     JPanel availableServers;
 
     JMenuBar menuBar = new JMenuBar();
@@ -61,8 +63,6 @@ public class GameView extends JFrame implements IModelObserver {
     JMenuItem menuFileSave = new JMenuItem("Save Game");
     JMenuItem menuFileLoadLocal = new JMenuItem("Load Local Game");
     JMenuItem menuFileExit = new JMenuItem("Exit");
-    JMenu menuOptions = new JMenu("Options");
-    JMenuItem setOptions = new JMenuItem("Set Options");
     JFileChooser loadedGameChooser = new JFileChooser();
     JFileChooser saveGameChooser = new JFileChooser();
 
@@ -79,6 +79,7 @@ public class GameView extends JFrame implements IModelObserver {
         pack();
         setVisible(true);
         setResizable(false);
+        insertOwnInformation()
     }
 
     @Override
@@ -151,16 +152,7 @@ public class GameView extends JFrame implements IModelObserver {
                         onFileExit();
                     }
                 });
-        menuOptions.add(setOptions);
-        setOptions.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        yourName.setText("Test");
-                    }
-                });
         menuBar.add(menuFile);
-        menuBar.add(menuOptions);
         setJMenuBar(menuBar);
     }
 
@@ -170,10 +162,12 @@ public class GameView extends JFrame implements IModelObserver {
         informationPanel.setLayout(null);
         informationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         yourName.setBounds(5, 5, 400, 25);
+        yourColor.setBounds(5, 30, 400, 25);
         opponentName.setBounds(5, 65, 400, 25);
         whoIsPlaying.setBounds(5, 125, 400, 25);
 
         informationPanel.add(yourName);
+        informationPanel.add(yourColor);
         informationPanel.add(opponentName);
         informationPanel.add(whoIsPlaying);
 
@@ -200,11 +194,17 @@ public class GameView extends JFrame implements IModelObserver {
     }
 
     private void insertOwnInformation() {
-        yourName.setText("Test");
+        try {
+            String name = InetAddress.getLocalHost().toString();
+            yourName.setText(name);
+        } catch (UnknownHostException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }
+        yourColor.setText("Sie sind Farbe: " + game.getMyColor().toString());
     }
 
     private void insertInformation() {
-        whoIsPlaying.setText(model.getCurrentPlayer().toString());
+        whoIsPlaying.setText("Spieler mit Farbe " + model.getCurrentPlayer().toString() + " ist am Zug.");
         opponentName.setText(game.getEnemyName());
     }
 
