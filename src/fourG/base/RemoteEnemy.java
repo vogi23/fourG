@@ -266,4 +266,12 @@ public class RemoteEnemy extends Enemy {
         }
         
     }
+    
+    @Override
+    public String getName(){
+        if(enemyAddr == null){
+            return "kein Gegner verbunden";
+        }
+        return enemyAddr.toString();
+    }
 }

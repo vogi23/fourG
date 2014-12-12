@@ -19,5 +19,6 @@ public interface IGameControlInteractions {
     public void reDiscoverEnemys();
     public void joinGame(GameOffer o);
     
+    public String getEnemyName();
     public Object getConsoleLockObject();
 }

@@ -66,23 +66,6 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     
     private void startGame(){
         model.setState(ModelState.Playing);
-        
-        /*
-        synchronized(consoleLock){ 
-            System.out.println("FOR TESTING: sumbit 3 Moves on random Columns every 500ms");
-        }
-        Move m = new Move(1);
-        m.setPlayer(Player.Red);
-        
-        for(int i = 0; i< 3; i++){
-            makeMove(m);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        */
     }
     
     /**
@@ -165,5 +148,13 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         if(RemoteEnemy.class.isInstance(enemy)){
             ((RemoteEnemy) enemy).connectToOnlineGame(o);
         }
+    }
+    
+    @Override
+    public String getEnemyName(){
+        if(enemy == null){
+            return "kein Gegner erstellt";
+        }
+        return enemy.getName();
     }
 }
