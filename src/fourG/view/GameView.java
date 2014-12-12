@@ -45,12 +45,10 @@ public class GameView extends JFrame implements IModelObserver {
     JPanel informationPanel = new JPanel();
     JLabel yourName = new JLabel("I'm The Hero");
     JLabel opponentName = new JLabel("Looser");
-    JLabel yourIP = new JLabel("Loaclhost");
-    JLabel opponentIP = new JLabel("256.256.256.256");
     JPanel gamePanel = new JPanel();
-    JPanel fourGInterface;
+    JPanel fourGInterface = new JPanel();;
     JPanel availableServers;
-    
+
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
     JMenuItem menuFileNewLocal = new JMenuItem("New Local Game");
@@ -73,7 +71,6 @@ public class GameView extends JFrame implements IModelObserver {
         this.model = model;
 
         createMenu();
-        fourGInterface = new JPanel();
         createInterface();
         pack();
         setVisible(true);
@@ -156,18 +153,16 @@ public class GameView extends JFrame implements IModelObserver {
         yourIP.setBounds(5, 35, 400, 25);
         opponentName.setBounds(5, 65, 400, 25);
         opponentIP.setBounds(5, 95, 400, 25);
+
         informationPanel.add(yourName);
-        informationPanel.add(yourIP);
         informationPanel.add(opponentName);
-        informationPanel.add(opponentIP);
-        
+
         // Panel for searching servers
-        this.availableServers = new JPanel();
+        availableServers = new JPanel();
         availableServers.setBounds(30, 200, 500, 300);
         availableServers.setBackground(Color.red);
         informationPanel.add(availableServers);
-        
-        
+
         add(gamePanel);
         gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
@@ -182,6 +177,14 @@ public class GameView extends JFrame implements IModelObserver {
                         calculateRow(xPosition);
                     }
                 });
+    }
+    
+    private void insertOwnInformation(){
+        yourName.setText("Test");
+    }
+    
+    private void insertInformation() {
+        opponentName.setText(game.getEnemyName());
     }
 
     private void onFileExit() {
@@ -207,9 +210,9 @@ public class GameView extends JFrame implements IModelObserver {
         Graphics g = fourGInterface.getGraphics();
         Move lastMove = model.getLastMove();
         g.setColor(lastMove.getPlayerColor());
-        System.out.println("GUI.drawCircle "+lastMove);
-        int xPos = (lastMove.getXPosition()*100);
-        int yPos = (lastMove.getYPosition()*100);           
+        System.out.println("GUI.drawCircle " + lastMove);
+        int xPos = (lastMove.getXPosition() * 100);
+        int yPos = (lastMove.getYPosition() * 100);
         g.drawOval(xPos + 25, yPos + 25, 50, 50);
         g.fillOval(xPos + 25, yPos + 25, 50, 50);
     }
@@ -230,44 +233,44 @@ public class GameView extends JFrame implements IModelObserver {
     @Override
     public void update() {
         // Move lastMove; // For drawCircle
-        switch(model.getState()){
-            case Playing :
+        switch (model.getState()) {
+            case Playing:
+                insertInformation();
                 drawCircle();
-            break;
-            case SearchOnlineGames :
+                break;
+            case SearchOnlineGames:
                 System.out.println("printgameoffers");
                 printGameOffers();
-            break;
+                break;
         }
-        
+
     }
-    
-    private void printGameOffers(){
-        clearGameOffer(); 
+
+    private void printGameOffers() {
+        clearGameOffer();
         ArrayList<GameOffer> gameoffers = model.getGameOffers();
         Iterator<GameOffer> i = gameoffers.iterator();
-        while(i.hasNext()){
+        while (i.hasNext()) {
             GameOffer go = i.next();
             GameOfferPanel offer;
-            synchronized(availableServers.getTreeLock()){
+            synchronized (availableServers.getTreeLock()) {
                 offer = new GameOfferPanel(go, availableServers.getComponentCount());
             }
             availableServers.add(offer);
             offer.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e){
+                public void mouseClicked(MouseEvent e) {
                     GameOffer o = ((GameOfferPanel) e.getSource()).getOffer();
                     game.joinGame(o);
                     System.out.println("join");
                 }
             });
-            
-            
+
             repaint();
         }
     }
-    
-    private void clearGameOffer(){
+
+    private void clearGameOffer() {
         availableServers.removeAll();
     }
 }
