@@ -54,6 +54,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         this.model = m;
     }
     
+    @Override
     public void setEnemy(IEnemy e){
         this.enemy = e;
     }
@@ -62,6 +63,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         iAm = color;
     }
     
+    @Override
     public void enemyReady(){
         synchronized(consoleLock){
             System.out.println("GameController: enemy Ready -> startgame");

@@ -90,9 +90,9 @@ public class MgmtController {
         
         // Create Enemy
         if(ki == true){
-            gameC.setEnemy(new LocalEnemy(this.gameM,this.gameC));
+            new LocalEnemy(this.gameM,this.gameC);
         }else{
-            gameC.setEnemy(new RandomEnemy(this.gameM,this.gameC));
+            new RandomEnemy(this.gameM,this.gameC);
         }
     }
     
@@ -108,7 +108,6 @@ public class MgmtController {
         
         // Create Enemy
         RemoteEnemy e = new RemoteEnemy(this.gameM,this.gameC);
-        gameC.setEnemy(e);
         e.listenForDiscoveryRequests();
         e.listenForJoiningRequests();
     }
@@ -128,7 +127,6 @@ public class MgmtController {
         
         // Create Enemy
         RemoteEnemy e = new RemoteEnemy(this.gameM,this.gameC);
-        gameC.setEnemy(e);
         e.discoverEnemysOnNetwork();
     }
     

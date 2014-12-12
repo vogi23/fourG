@@ -21,6 +21,7 @@ public abstract class Enemy implements IEnemy {
     public Enemy(IGameModelInformations gamemodel, IGameControlUpdates gamecontroller){
         this.gameM = gamemodel;
         this.gameC = gamecontroller;
+        gameC.setEnemy(this);
     }
     
     @Override

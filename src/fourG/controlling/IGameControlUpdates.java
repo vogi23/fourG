@@ -1,5 +1,6 @@
 package fourG.controlling;
 
+import fourG.base.IEnemy;
 import fourG.base.Move;
 import fourG.model.GameOffer;
 
@@ -17,6 +18,7 @@ public interface IGameControlUpdates {
     public boolean receiveMove(Move m);
     public void enemyReady();
     public void offerGame(GameOffer o);
+    public void setEnemy(IEnemy e);
     
     public Object getConsoleLockObject();
 }
