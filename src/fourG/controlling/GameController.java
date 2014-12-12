@@ -78,7 +78,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
     public boolean makeMove(Move m){
         
         if(model.getState() != ModelState.Playing){
-            return false;
+            return true;
         }
         
         // Process move. return false if invalid.
@@ -98,7 +98,7 @@ public class GameController implements IGameControlInteractions, IGameControlUpd
         
         // Send valid move to enemy
         enemy.receiveMove(m);
-                
+        
         return true;
     }
     
