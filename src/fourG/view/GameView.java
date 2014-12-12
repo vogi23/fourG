@@ -14,11 +14,8 @@ import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
 import java.awt.Graphics;
-<<<<<<< HEAD
-=======
 import java.util.ArrayList;
 import java.util.Iterator;
->>>>>>> e8e7183ad288ef80a1cea5616b3c0bab630d24c7
 
 /**
  * To-Do-List: - Farbe des Spielers auslesen - yPosition des Moves richtig
