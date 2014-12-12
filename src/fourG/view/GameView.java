@@ -179,6 +179,7 @@ public class GameView extends JFrame implements IModelObserver {
 
         // Panel for searching servers
         availableServers = new JPanel();
+        availableServers.setLayout(null);
         availableServers.setBounds(30, 200, 500, 300);
         availableServers.setBackground(Color.red);
         informationPanel.add(availableServers);
