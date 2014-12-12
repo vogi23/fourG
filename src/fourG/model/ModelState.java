@@ -6,11 +6,13 @@
 
 package fourG.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author vogi23
  */
-public enum ModelState {
+public enum ModelState implements Serializable{
     Home,                   // StartBildschirm
     SearchOnlineGames,       // Statusbildschirm mit möglichen Online Games, wo man teilnehmen kann. (Refresh Button)
     WaitingForRemoteJoin,   // Statusbildschimr mit aktuellen Anfragen von Online Gegnern

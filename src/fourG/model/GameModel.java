@@ -3,6 +3,7 @@ package fourG.model;
 
 import fourG.base.Player;
 import fourG.base.Move;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -16,7 +17,7 @@ import java.util.HashSet;
  *
  * @author tgdvoch5
  */
-public class GameModel implements IGameModelModifications, IGameModelInformations {
+public class GameModel implements Serializable, IGameModelModifications, IGameModelInformations {
     
     //Playdata
     private Player nextPlayer;
@@ -34,7 +35,7 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     
     //Classes
     private transient HashSet<IModelObserver> observers;
-    private ArrayList<GameOffer> gameoffers;    //CHECK it
+    private transient ArrayList<GameOffer> gameoffers;
     private ModelState state;
     private GameBoard gameBoard;
     
@@ -224,6 +225,9 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     }
     
     public void addModelObserver(IModelObserver obs){
+        if(observers == null){
+            observers = new HashSet<>();
+        }
         observers.add(obs);
     }
     
@@ -231,6 +235,9 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
     public void addGameOffer(GameOffer o) {
         if(o == null){
             return;
+        }
+        if(gameoffers == null){
+            gameoffers = new ArrayList<>();
         }
         gameoffers.add(o);
         broadcastUpdate();

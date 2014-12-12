@@ -1,8 +1,10 @@
 package fourG.view;
 
 import fourG.base.Move;
+import fourG.base.Player;
 import fourG.controlling.MgmtController;
 import fourG.controlling.GameController;
+import fourG.model.GameBoard;
 import fourG.model.GameOffer;
 import fourG.model.IGameModelInformations;
 import fourG.model.IModelObserver;
@@ -86,6 +88,7 @@ public class GameView extends JFrame implements IModelObserver {
     public void paint(Graphics g) {
         super.paint(g);
         drawInterface(); //To change body of generated methods, choose Tools | Templates.
+        drawCircle();
     }
 
     private void createMenu() {
@@ -139,8 +142,8 @@ public class GameView extends JFrame implements IModelObserver {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String fileName = getFileName();
-                        mgmt.initLoadedGame(new File(fileName));
+                        File f = getFileName();
+                        mgmt.initLoadedGame(f);
                     }
                 });
         menuFile.addSeparator();
@@ -212,11 +215,11 @@ public class GameView extends JFrame implements IModelObserver {
         System.exit(10);
     }
 
-    private String getFileName() {
+    private File getFileName() {
         int r = loadedGameChooser.showOpenDialog(this);
-        String s = "no File!";
+        File s = null;
         if (r == JFileChooser.APPROVE_OPTION) {
-            s = loadedGameChooser.getSelectedFile().getName();
+            s = loadedGameChooser.getSelectedFile();
         }
         return s;
     }
@@ -229,16 +232,28 @@ public class GameView extends JFrame implements IModelObserver {
 
     private void drawCircle() {
         Graphics g = fourGInterface.getGraphics();
-        Move lastMove = model.getLastMove();
-        g.setColor(lastMove.getPlayerColor());
-        System.out.println("GUI.drawCircle " + lastMove);
-        int xPos = (lastMove.getXPosition() * 100);
-        int yPos = (lastMove.getYPosition() * 100);
-        g.drawOval(xPos + 25, yPos + 25, 50, 50);
-        g.fillOval(xPos + 25, yPos + 25, 50, 50);
+        GameBoard b = model.getBoard();
+        for(int i = 0; i < b.getWidth(); i++){
+            for(int j = 0; j < b.getHeight(); j++){
+                Player p = b.getCell(i, j);
+                if(p == Player.None){
+                    continue;   
+                }
+                // DrawBoard
+                g.setColor(Color.red);
+                if(p == Player.Blue){g.setColor(Color.blue);}
+                int xPos = (i * 100);
+                int yPos = ((b.getHeight()-j-1) * 100);
+                System.out.println(yPos);
+                g.drawOval(xPos + 25, yPos + 25, 50, 50);
+                g.fillOval(xPos + 25, yPos + 25, 50, 50);
+                
+            }
+        }
+        
     }
 
-    private void drawInterface() {
+    private void drawInterface(){
         Graphics g = fourGInterface.getGraphics();
         g.setColor(Color.blue);
         for (int i = 0; i <= 7; i++) {
@@ -274,7 +289,7 @@ public class GameView extends JFrame implements IModelObserver {
         }
     }
 
-    private void clearGameOffer() {
+    private void clearGameOffer(){
         availableServers.removeAll();
     }
 
@@ -283,7 +298,7 @@ public class GameView extends JFrame implements IModelObserver {
         switch (model.getState()) {
             case Playing:
                 insertInformation();
-                drawCircle();
+                repaint();
                 break;
             case SearchOnlineGames:
                 System.out.println("printgameoffers");

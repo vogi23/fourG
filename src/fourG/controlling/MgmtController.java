@@ -1,6 +1,7 @@
 package fourG.controlling;
 
 
+import com.sun.corba.se.impl.io.IIOPInputStream;
 import fourG.base.LocalEnemy;
 import fourG.base.Player;
 import fourG.base.RandomEnemy;
@@ -9,6 +10,15 @@ import fourG.model.GameModel;
 import fourG.model.ModelState;
 import fourG.view.GameView;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,10 +40,13 @@ public class MgmtController {
         reInitGame();
     }
     
+    private void reInitGame(){
+        reInitGame(null);
+    }
     /**
      * Inits new GameModel, Controller and View
      */
-    private void reInitGame(){
+    private void reInitGame(GameModel gm){
         
         resetView();
         resetController();
@@ -41,10 +54,14 @@ public class MgmtController {
         // Create Controller
         this.gameC = new GameController();
         
-        // Create Model
-        this.gameM = new GameModel();
-        this.gameC.setModel(gameM);
+        // Create/Load Model
+        if(gm == null){
+            this.gameM = new GameModel();
+        }else{
+            this.gameM = gm;
+        }
         
+        this.gameC.setModel(gameM);
         // Create View
         this.gameV = new GameView(this, this.gameC, gameM);
         gameM.addModelObserver(this.gameV);
@@ -74,8 +91,32 @@ public class MgmtController {
      * Usually called from the GameView
      */
     public void initLoadedGame(File f){
-        reInitGame();
-        //...
+        
+        System.out.println(f);
+        ObjectInputStream ois;
+        GameModel gm = null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream(f));
+            Object o = null;
+            try {
+                o = ois.readObject();
+            } catch (ClassNotFoundException ex) {
+                System.out.println("Unknown file1");
+                return;
+            }
+            if(o.getClass() != GameModel.class){
+                System.out.println("Unknown file2");
+                return;
+            }
+            gm = (GameModel) o;
+        } catch (IOException ex) {
+            System.out.println("LoadGame IO Exception: "+ex.getMessage());
+            return;
+        }
+        
+        reInitGame(gm);
+        
+        new RandomEnemy(this.gameM,this.gameC);
     }
         
     /**
@@ -131,7 +172,29 @@ public class MgmtController {
     }
     
     public void initSaveGame(){
-        reInitGame();
-        //...
+        JFileChooser c = new JFileChooser();
+        // Demonstrate "Save" dialog:
+        int rVal = c.showSaveDialog(gameV);
+        if (rVal == JFileChooser.APPROVE_OPTION) {
+            String file = (c.getSelectedFile().getName());
+            String dir = (c.getCurrentDirectory().toString());
+            String path = dir + System.getProperty("file.separator")+file;
+            System.out.println("Selcted for save: "+path);
+            
+            File f = new File(path);
+            FileOutputStream fos;
+            try{
+                fos = new FileOutputStream(f);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(gameM);
+                oos.flush();
+                oos.close();
+            } catch(FileNotFoundException e){
+                System.err.println("File not Found");
+            } catch (IOException ex) {
+                System.err.println("Save IO Error " + ex.getMessage());
+            }
+        }
+        System.out.println("File saved!:)");
     }
 }

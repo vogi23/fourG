@@ -8,12 +8,13 @@ package fourG.model;
 
 import fourG.base.Move;
 import fourG.base.Player;
+import java.io.Serializable;
 
 /**
  *
  * @author vogi23
  */
-public class GameBoard {
+public class GameBoard implements Serializable{
     
     private int x;          //y, Koordinate
     private int y;          //x Koordinate
