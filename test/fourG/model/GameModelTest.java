@@ -34,11 +34,11 @@ public class GameModelTest {
         Move mB = new Move(4);
         mB.setPlayer(Player.Blue);
         GameModel myGame = new GameModel();
+        myGame.setState(ModelState.Playing);
         boolean expResult = true;
         boolean result;
         
         for(int i=0;i<3;i++){
-
             checkMove(myGame,mR);
             checkWinner(myGame,false);
             mB = new Move(i);
@@ -54,8 +54,6 @@ public class GameModelTest {
         mB.setPlayer(Player.Blue);
         checkMove(myGame,mB);
         checkWinner(myGame,true);
-        checkMove(myGame,mR);
-        checkWinner(myGame,false);
     }
     
         @Test

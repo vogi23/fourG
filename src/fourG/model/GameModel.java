@@ -81,7 +81,12 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
             return false;
         }
         if(state!=ModelState.Playing){
-            System.out.println("Player "+currentPlayer+" hat bereits Gewonnen!");
+            if(state==ModelState.GameOver){
+                System.out.println("Player "+currentPlayer+" hat bereits Gewonnen!");
+            }
+            else{
+                System.out.println("Der State ist nicht Playing, er ist: "+state);
+            }
             return false;
         }
         //-----Move is valid----
@@ -193,14 +198,14 @@ public class GameModel implements IGameModelModifications, IGameModelInformation
                 counterRight++;
                 counter++;
         }
-        if(moveCounter>=winValue-1){
+        if(counter>=winValue-1){
                 winner=currentPlayer;
                 state=ModelState.GameOver;  
                 return true;        //x Win
         }
         //--------No Winner--------
         //check draw
-        if(counter>=maxInserts){
+        if(moveCounter>=maxInserts){
                 winner=Player.Draw;
                 state=ModelState.GameOver;  
                 return true;        //x Win
