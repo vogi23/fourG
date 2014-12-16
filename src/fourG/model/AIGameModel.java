@@ -31,19 +31,23 @@ public class AIGameModel extends GameModel {
             discsPerColumn[i] = 0;
         }
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (board.getCell(j, i) != Player.None) {
-                    currentPlayer = board.getCell(j, i);
-                    processMove(new Move(j));
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (board.getCell(i, j) != Player.None) {
+                    currentPlayer = board.getCell(i, j);
+                    processMove(new Move(i));
                 }
             }
         }
+
+        currentPlayer = Player.Blue;
+        System.out.println("boardBlue " + boardBlue);
+        System.out.println("boardRed " + boardRed);
     }
 
 	public ArrayList<Integer> getPossibleMoves() {
         ArrayList<Integer> possibleMoves = new ArrayList<>();
-        for (int i = 0; i < height; i++) {
+        for (int i = 0; i < width; i++) {
             if (isMoveValid(i)) {
                 possibleMoves.add(i);
             }
@@ -62,9 +66,23 @@ public class AIGameModel extends GameModel {
             boardRed ^= pos;
         }
         discsPerColumn[col]++;
+//        System.out.println("Move for Player " + currentPlayer.name() + " " + m.getXPosition());
+//        System.out.println("boardBlue: " + boardBlue);
+//        System.out.println("boardRed: " + boardRed);
         changePlayer();
 
         return true;
+    }
+
+    public void undoMove(Move move) {
+        int col = move.getXPosition();
+        discsPerColumn[col]--;
+        long pos = ((long)1 << (discsPerColumn[col] + height * col));
+        if (currentPlayer == Player.Blue) {
+            boardRed ^= pos;
+        } else{
+            boardBlue ^= pos;
+        }
     }
 
     @Override
@@ -94,7 +112,17 @@ public class AIGameModel extends GameModel {
         }
         b = boardBlue & (boardBlue >> 1);
         if ((b & (b >> 2)) > 0) { // check |
-            return Player.Blue;
+            long c = (b & (b >> 2)); // false positive
+            c |= 1024819115206086200L; // pattern for false positives
+            c ^= 1024819115206086200L;
+            if (c > 0) {
+                return Player.Blue;
+            }
+            
+//
+//            if ((c & ) > 0) { //  && (b & 130894241400L) > 0 && (b & 523576965600L) > 0) {
+//                return Player.Blue;
+//            }
         }
 
         // test red
@@ -112,12 +140,20 @@ public class AIGameModel extends GameModel {
         }
         b = boardRed & (boardRed >> 1);
         if ((b & (b >> 2)) > 0) { // check |
-            return Player.Red;
+            long c = (b & (b >> 2)); // false positive
+            c |= 1024819115206086200L; // pattern for false positives
+            c ^= 1024819115206086200L;
+            if (c > 0) {
+                return Player.Red;
+            }
         }
         
         return Player.None;
     }
 
+    public long getBlueBoard() {
+        return boardBlue;
+    }
 
 
     private void changePlayer() {

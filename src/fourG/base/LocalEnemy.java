@@ -1,8 +1,10 @@
 package fourG.base;
 
 import fourG.controlling.GameController;
+import fourG.controlling.IGameControlUpdates;
 import fourG.model.AIGameModel;
 import fourG.model.GameModel;
+import fourG.model.IGameModelInformations;
 import java.util.ArrayList;
 
 /*
@@ -16,14 +18,13 @@ import java.util.ArrayList;
  * @author vogi23
  */
 public class LocalEnemy extends Enemy implements IEnemy {
-	private AIGameModel gameModel;
 	private final int MAX_DEPTH = 5;
     private final Player me = Player.Blue;
+    private AIGameModel gameModel;
 
-    public LocalEnemy(GameModel gamemodel, GameController gamecontroller){
+    public LocalEnemy(IGameModelInformations gamemodel, IGameControlUpdates gamecontroller){
         super(gamemodel, gamecontroller);
         
-	this.gameModel = new AIGameModel(gamemodel.getBoard());
         gameC.enemyReady();
     }
 
@@ -34,12 +35,17 @@ public class LocalEnemy extends Enemy implements IEnemy {
      */
     @Override
     public void receiveMove(Move m) {
+        gameModel = new AIGameModel(super.gameM.getBoard());
         ArrayList<Integer> possibleMoves = gameModel.getPossibleMoves();
-        int maxValue = 0;
+        float maxValue = Float.NEGATIVE_INFINITY;
         int bestMove = -1;
 
+        System.out.println("");
+        System.out.println("searching best move");
+
 	    for (Integer possibleMove : possibleMoves) {
-		    int value = evaluateMove(possibleMove, 0, MAX_DEPTH);
+		    float value = evaluateMove(possibleMove, 1);
+            System.out.println("move: " + possibleMove + "; value: " + value);
 		    if (value > maxValue) {
                 bestMove = possibleMove;
                 maxValue = value;
@@ -49,24 +55,32 @@ public class LocalEnemy extends Enemy implements IEnemy {
         super.gameC.receiveMove(new Move(bestMove));
     }
 
-	private int evaluateMove(Integer possibleMove, int value, int maxDepth) {
+	private float evaluateMove(Integer possibleMove, int depth) {
         Move aMove = new Move(possibleMove);
+        System.out.println("before processMove: " + gameModel.);
         boolean processMove = gameModel.processMove(aMove);
         Player winner = gameModel.getWinner();
+        float value = 0;
         if (winner != Player.None) {
-            value = winner == me ? value + 1 : value -1;
-        } else if (maxDepth > 0 ) {
+            if (winner == Player.Draw) {
+                value = 0;
+            } else {
+                value = winner == me ? 1 : -1;
+            }
+        } else if (depth <= MAX_DEPTH ) {
             ArrayList<Integer> possibleMoves = gameModel.getPossibleMoves();
+            ++depth;
             for (Integer move : possibleMoves) {
-                value = evaluateMove(move, value, --maxDepth);
+                value += evaluateMove(move, depth);
             }
         }
 
-        return value;
+        gameModel.undoMove(aMove);
+        return value / depth;
 	}
     
     @Override
     public String getEnemyName(){
-        return "Schlauer Gegner";
+        return "The Master";
     }
 }
