@@ -14,7 +14,7 @@ import org.junit.Assert;
  * @author lts
  */
 public class TestGameControlUpdates implements IGameControlUpdates {
-    private int expected;
+    private final int expected;
 
     public TestGameControlUpdates(int move) {
         this.expected = move;
@@ -40,5 +40,9 @@ public class TestGameControlUpdates implements IGameControlUpdates {
     public Object getConsoleLockObject() {
         return new Object();
     }
+
+	@Override
+	public void setEnemy(IEnemy e) {
+	}
     
 }

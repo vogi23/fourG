@@ -309,4 +309,23 @@ public class AIGameModelTest {
         Player result = instance.getWinner();
         assertEquals(expResult, result);
     }
+
+	@Test
+	public void testMoveUnmove() {
+        GameBoard board = new GameBoard(7, 6);
+        board.setCell(0, 0, Player.Blue);
+        board.setCell(0, 1, Player.Blue);
+        board.setCell(0, 2, Player.Red);
+        board.setCell(0, 3, Player.Blue);
+		AIGameModel instance = new AIGameModel(board);
+		long expected = instance.getBlueBoard();
+		Move move = new Move(3);
+		instance.processMove(move);
+		long moveProcessed = instance.getBlueBoard();
+		instance.undoMove(move);
+		long actual = instance.getBlueBoard();
+
+		assertEquals(expected, actual);
+		assertNotSame(expected, moveProcessed);
+	}
  }

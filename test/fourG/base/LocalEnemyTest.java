@@ -68,32 +68,6 @@ public class LocalEnemyTest {
         enemy.receiveMove(dummyMove);
     }
 
-    /**
-     * Test of receiveMove method, of class LocalEnemy.
-     */
-    @Test
-    public void testReceiveMove() {
-        System.out.println("receiveMove");
-        Move m = null;
-        LocalEnemy instance = null;
-        instance.receiveMove(m);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getEnemyName method, of class LocalEnemy.
-     */
-    @Test
-    public void testGetEnemyName() {
-        System.out.println("getEnemyName");
-        LocalEnemy instance = null;
-        String expResult = "";
-        String result = instance.getEnemyName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
     private GameBoard createHorizontalDefeatBoard() {
         GameBoard board = new GameBoard(7, 6);

@@ -57,7 +57,6 @@ public class LocalEnemy extends Enemy implements IEnemy {
 
 	private float evaluateMove(Integer possibleMove, int depth) {
         Move aMove = new Move(possibleMove);
-        System.out.println("before processMove: " + gameModel.);
         boolean processMove = gameModel.processMove(aMove);
         Player winner = gameModel.getWinner();
         float value = 0;

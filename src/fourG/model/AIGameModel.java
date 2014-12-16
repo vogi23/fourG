@@ -59,7 +59,7 @@ public class AIGameModel extends GameModel {
     @Override
     public boolean processMove(Move m) {
         int col = m.getXPosition();
-        long pos = ((long)1 << (discsPerColumn[col] + 7 * col));
+        long pos = ((long)1 << (discsPerColumn[col] + height * col));
         if (currentPlayer == Player.Blue) {
             boardBlue ^= pos;
         } else if (currentPlayer == Player.Red) {
@@ -75,13 +75,14 @@ public class AIGameModel extends GameModel {
     }
 
     public void undoMove(Move move) {
+		changePlayer();
         int col = move.getXPosition();
         discsPerColumn[col]--;
         long pos = ((long)1 << (discsPerColumn[col] + height * col));
         if (currentPlayer == Player.Blue) {
-            boardRed ^= pos;
-        } else{
             boardBlue ^= pos;
+        } else{
+            boardRed ^= pos;
         }
     }
 
