@@ -30,7 +30,7 @@ import javax.swing.JFileChooser;
  *
  * @author tgdvoch5
  */
-public class MgmtController {
+public class MgmtController implements IMgmtControlInteractions{
     
     private GameModel gameM;
     private GameController gameC;

@@ -2,8 +2,8 @@ package fourG.view;
 
 import fourG.base.Move;
 import fourG.base.Player;
-import fourG.controlling.MgmtController;
-import fourG.controlling.GameController;
+import fourG.controlling.IGameControlInteractions;
+import fourG.controlling.IMgmtControlInteractions;
 import fourG.model.GameBoard;
 import fourG.model.GameOffer;
 import fourG.model.IGameModelInformations;
@@ -35,8 +35,8 @@ import javax.swing.border.TitledBorder;
  */
 public class GameView extends JFrame implements IModelObserver {
 
-    private MgmtController mgmt;
-    private GameController game;
+    private IMgmtControlInteractions mgmt;
+    private IGameControlInteractions game;
     private IGameModelInformations model;
     private int gamePanelHeight = 599;
     private int gamePanelWidth = 699;
@@ -71,7 +71,7 @@ public class GameView extends JFrame implements IModelObserver {
     JFileChooser loadedGameChooser = new JFileChooser();
     JFileChooser saveGameChooser = new JFileChooser();
 
-    public GameView(MgmtController mgmt, GameController game, IGameModelInformations model) {
+    public GameView(IMgmtControlInteractions mgmt, IGameControlInteractions game, IGameModelInformations model) {
         super("fourG");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 

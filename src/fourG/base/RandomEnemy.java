@@ -6,7 +6,6 @@
 package fourG.base;
 
 import fourG.controlling.IGameControlUpdates;
-import fourG.controlling.InvalidMoveException;
 import fourG.model.GameBoard;
 import fourG.model.IGameModelInformations;
 import java.util.Random;
