@@ -8,7 +8,6 @@ package fourG.view;
 
 import fourG.model.GameOffer;
 import java.awt.Color;
-import java.net.InetAddress;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

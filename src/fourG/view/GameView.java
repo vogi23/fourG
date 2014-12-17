@@ -1,8 +1,10 @@
 package fourG.view;
 
 import fourG.base.Move;
-import fourG.controlling.MgmtController;
-import fourG.controlling.GameController;
+import fourG.base.Player;
+import fourG.controlling.IGameControlInteractions;
+import fourG.controlling.IMgmtControlInteractions;
+import fourG.model.GameBoard;
 import fourG.model.GameOffer;
 import fourG.model.IGameModelInformations;
 import fourG.model.IModelObserver;
@@ -18,14 +20,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
-/**
- * To-Do-List: - Farbe des Spielers auslesen - yPosition des Moves richtig
- * einzeichnen - Hintergrund bei Erstellung des Interfaces einrichten - Update
- * implementieren - Spielfeld skaliert mit Faktor 100 --> Anpassung der
- * Spielfeldgrösse damit theoretisch möglich --> Rundungsfehler bei Typecasting
- * zu int für Array genutzt
- */
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -37,8 +35,8 @@ import java.util.Iterator;
  */
 public class GameView extends JFrame implements IModelObserver {
 
-    private MgmtController mgmt;
-    private GameController game;
+    private IMgmtControlInteractions mgmt;
+    private IGameControlInteractions game;
     private IGameModelInformations model;
     private int gamePanelHeight = 599;
     private int gamePanelWidth = 699;
@@ -47,11 +45,18 @@ public class GameView extends JFrame implements IModelObserver {
     JPanel informationPanel = new JPanel();
     JPanel gamePanel = new JPanel();
     JPanel fourGInterface = new JPanel();
-    JPanel availableServers;
+    JPanel availableServers = new JPanel();
     JLabel yourName = new JLabel();
     JLabel opponentName = new JLabel();
     JLabel whoIsPlaying = new JLabel();
     JLabel yourColor = new JLabel();
+    JOptionPane abortGame = new JOptionPane();
+
+    Border etchedBorder = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+    Border blackLineBorder = BorderFactory.createLineBorder(Color.black, 2);
+    Border blueLineBorder = BorderFactory.createLineBorder(Color.blue, 10);
+    TitledBorder availableServerTitle = BorderFactory.createTitledBorder(etchedBorder, "Verfügbare Spielserver");
+
 
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
@@ -66,7 +71,7 @@ public class GameView extends JFrame implements IModelObserver {
     JFileChooser loadedGameChooser = new JFileChooser();
     JFileChooser saveGameChooser = new JFileChooser();
 
-    public GameView(MgmtController mgmt, GameController game, IGameModelInformations model) {
+    public GameView(IMgmtControlInteractions mgmt, IGameControlInteractions game, IGameModelInformations model) {
         super("fourG");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -86,6 +91,7 @@ public class GameView extends JFrame implements IModelObserver {
     public void paint(Graphics g) {
         super.paint(g);
         drawInterface(); //To change body of generated methods, choose Tools | Templates.
+        drawCircle();
     }
 
     private void createMenu() {
@@ -95,7 +101,10 @@ public class GameView extends JFrame implements IModelObserver {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mgmt.initLocalGame(true);
+                        int response = JOptionPane.showConfirmDialog(gui, "Aktuelles Spiel wird abgeborchen und ein neues Spiel gegen schweren Computer wird gestartet", "Spiel gegen schweren Gegner starten", JOptionPane.YES_NO_OPTION);
+                        if (response == JOptionPane.YES_OPTION) {
+                            mgmt.initLocalGame(true);
+                        }
                     }
                 });
         menuFile.add(menuFileNewLocalRandom);
@@ -103,7 +112,10 @@ public class GameView extends JFrame implements IModelObserver {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mgmt.initLocalGame(false);
+                        int response = JOptionPane.showConfirmDialog(gui, "Aktuelles Spiel wird abgeborchen und ein neues Spiel gegen leichten Computer wird gestartet", "Spiel gegen einfachen Gegner starten", JOptionPane.YES_NO_OPTION);
+                        if (response == JOptionPane.YES_OPTION) {
+                            mgmt.initLocalGame(false);
+                        }
                     }
                 });
         menuFile.addSeparator();
@@ -112,7 +124,10 @@ public class GameView extends JFrame implements IModelObserver {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mgmt.initCreateOnlineGame();
+                        int response = JOptionPane.showConfirmDialog(gui, "Aktuelles Spiel wird abgeborchen und ein neues Online-Spiel wird gestartet", "Online-Spiel starten", JOptionPane.YES_NO_OPTION);
+                        if (response == JOptionPane.YES_OPTION) {
+                            mgmt.initCreateOnlineGame();
+                        }
                     }
                 });
         menuFile.addSeparator();
@@ -121,7 +136,10 @@ public class GameView extends JFrame implements IModelObserver {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mgmt.initJoinOnlineGame();
+                        int response = JOptionPane.showConfirmDialog(gui, "Aktuelles Spiel wird abgeborchen. Sie können aus einem Online-Spiel beitreten", "Online-Spiel beitreten", JOptionPane.YES_NO_OPTION);
+                        if (response == JOptionPane.YES_OPTION) {
+                            mgmt.initJoinOnlineGame();
+                        }
                     }
                 });
         menuFile.addSeparator();
@@ -139,8 +157,11 @@ public class GameView extends JFrame implements IModelObserver {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String fileName = getFileName();
-                        mgmt.initLoadedGame(new File(fileName));
+                        int response = JOptionPane.showConfirmDialog(gui, "Aktuelles Spiel wird abgeborchen. Sie können ein gespeichertes Spiel starten", "Gespeichertes Spiel weiterführen", JOptionPane.YES_NO_OPTION);
+                        if (response == JOptionPane.YES_OPTION) {
+                            File f = getFileName();
+                            mgmt.initLoadedGame(f);
+                        }
                     }
                 });
         menuFile.addSeparator();
@@ -149,7 +170,10 @@ public class GameView extends JFrame implements IModelObserver {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        onFileExit();
+                        int response = JOptionPane.showConfirmDialog(gui, "Sie verlassen das Spiel nun", "Auf Wiedersehen", JOptionPane.YES_NO_OPTION);
+                        if (response == JOptionPane.YES_OPTION) {
+                            onFileExit();
+                        }
                     }
                 });
         menuBar.add(menuFile);
@@ -160,29 +184,30 @@ public class GameView extends JFrame implements IModelObserver {
         setLayout(new GridLayout(1, 2));
         add(informationPanel);
         informationPanel.setLayout(null);
-        informationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        yourName.setBounds(5, 5, 400, 25);
-        yourColor.setBounds(5, 30, 400, 25);
-        opponentName.setBounds(5, 65, 400, 25);
-        whoIsPlaying.setBounds(5, 125, 400, 25);
+        informationPanel.setBorder(blackLineBorder);
+        yourName.setBounds(30, 5, 400, 25);
+        yourColor.setBounds(30, 30, 400, 25);
+        opponentName.setBounds(30, 65, 400, 25);
+        whoIsPlaying.setBounds(30, 125, 400, 25);
 
         informationPanel.add(yourName);
         informationPanel.add(yourColor);
         informationPanel.add(opponentName);
         informationPanel.add(whoIsPlaying);
+        whoIsPlaying.setBorder(etchedBorder);
 
         // Panel for searching servers
-        availableServers = new JPanel();
         availableServers.setLayout(null);
         availableServers.setBounds(30, 200, 500, 300);
-        availableServers.setBackground(Color.red);
-        informationPanel.add(availableServers);
+        availableServers.setBorder(availableServerTitle);
 
+        informationPanel.add(availableServers);
+        
         add(gamePanel);
-        gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        gamePanel.setBorder(blackLineBorder);
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
         fourGInterface.setPreferredSize(new Dimension(gamePanelWidth, gamePanelHeight));
-        fourGInterface.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
+        fourGInterface.setBorder(blueLineBorder);
         fourGInterface.addMouseListener(
                 new MouseAdapter() {
                     @Override
@@ -205,18 +230,18 @@ public class GameView extends JFrame implements IModelObserver {
 
     private void insertInformation() {
         whoIsPlaying.setText("Spieler mit Farbe " + model.getCurrentPlayer().toString() + " ist am Zug.");
-        opponentName.setText(game.getEnemyName());
+        opponentName.setText("Sie spielen gegen: " + game.getEnemyName());
     }
 
     private void onFileExit() {
         System.exit(10);
     }
 
-    private String getFileName() {
+    private File getFileName() {
         int r = loadedGameChooser.showOpenDialog(this);
-        String s = "no File!";
+        File s = null;
         if (r == JFileChooser.APPROVE_OPTION) {
-            s = loadedGameChooser.getSelectedFile().getName();
+            s = loadedGameChooser.getSelectedFile();
         }
         return s;
     }
@@ -229,13 +254,25 @@ public class GameView extends JFrame implements IModelObserver {
 
     private void drawCircle() {
         Graphics g = fourGInterface.getGraphics();
-        Move lastMove = model.getLastMove();
-        g.setColor(lastMove.getPlayerColor());
-        System.out.println("GUI.drawCircle " + lastMove);
-        int xPos = (lastMove.getXPosition() * 100);
-        int yPos = (lastMove.getYPosition() * 100);
-        g.drawOval(xPos + 25, yPos + 25, 50, 50);
-        g.fillOval(xPos + 25, yPos + 25, 50, 50);
+        GameBoard b = model.getBoard();
+        for (int i = 0; i < b.getWidth(); i++) {
+            for (int j = 0; j < b.getHeight(); j++) {
+                Player p = b.getCell(i, j);
+                if (p == Player.None) {
+                    continue;
+                }
+                // DrawBoard
+                g.setColor(Color.red);
+                if (p == Player.Blue) {
+                    g.setColor(Color.blue);
+                }
+                int xPos = (i * 100);
+                int yPos = ((b.getHeight() - j - 1) * 100);
+                g.drawOval(xPos + 25, yPos + 25, 50, 50);
+                g.fillOval(xPos + 25, yPos + 25, 50, 50);
+            }
+        }
+
     }
 
     private void drawInterface() {
@@ -283,7 +320,7 @@ public class GameView extends JFrame implements IModelObserver {
         switch (model.getState()) {
             case Playing:
                 insertInformation();
-                drawCircle();
+                repaint();
                 break;
             case SearchOnlineGames:
                 System.out.println("printgameoffers");

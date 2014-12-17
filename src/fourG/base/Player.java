@@ -1,5 +1,7 @@
 package fourG.base;
 
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,7 +12,7 @@ package fourG.base;
  *
  * @author vogi23
  */
-public enum Player {
+public enum Player implements Serializable{
     Red,
     Blue,
     None,
