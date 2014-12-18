@@ -57,7 +57,6 @@ public class GameView extends JFrame implements IModelObserver {
     Border blueLineBorder = BorderFactory.createLineBorder(Color.blue, 10);
     TitledBorder availableServerTitle = BorderFactory.createTitledBorder(etchedBorder, "Verfügbare Spielserver");
 
-
     JMenuBar menuBar = new JMenuBar();
     JMenu menuFile = new JMenu("File");
     JMenuItem menuFileNewLocal = new JMenuItem("New Local Game");
@@ -91,6 +90,7 @@ public class GameView extends JFrame implements IModelObserver {
     public void paint(Graphics g) {
         super.paint(g);
         drawInterface(); //To change body of generated methods, choose Tools | Templates.
+        insertInformation();
         drawCircle();
     }
 
@@ -202,7 +202,7 @@ public class GameView extends JFrame implements IModelObserver {
         availableServers.setBorder(availableServerTitle);
 
         informationPanel.add(availableServers);
-        
+
         add(gamePanel);
         gamePanel.setBorder(blackLineBorder);
         gamePanel.add(fourGInterface, BorderLayout.CENTER);
@@ -272,7 +272,6 @@ public class GameView extends JFrame implements IModelObserver {
                 g.fillOval(xPos + 25, yPos + 25, 50, 50);
             }
         }
-
     }
 
     private void drawInterface() {
@@ -306,7 +305,6 @@ public class GameView extends JFrame implements IModelObserver {
                     game.joinGame(o);
                 }
             });
-
             repaint();
         }
     }
@@ -317,10 +315,10 @@ public class GameView extends JFrame implements IModelObserver {
 
     @Override
     public void update() {
+        repaint();
         switch (model.getState()) {
-            case Playing:
-                insertInformation();
-                repaint();
+            case GameOver:
+                JOptionPane.showMessageDialog(gui, "Spieler " + model.getWinner() + " hat das Spiel gewonnen.", "Spiel beendet", JOptionPane.INFORMATION_MESSAGE);
                 break;
             case SearchOnlineGames:
                 System.out.println("printgameoffers");

@@ -112,11 +112,11 @@ public class GameModel implements Serializable, IGameModelModifications, IGameMo
             nextPlayer=Player.Red;
             lastPlayer=Player.Blue;
         }
-        broadcastUpdate();
+        
         if (isGameover()){
             System.out.println("Der Player "+lastPlayer+" hat gewonnen!------" );
-            
         }
+        broadcastUpdate();
         return true;    
     }
 
