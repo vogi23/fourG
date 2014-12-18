@@ -321,7 +321,7 @@ public class GameView extends JFrame implements IModelObserver {
                 JOptionPane.showMessageDialog(gui, "Spieler " + model.getWinner() + " hat das Spiel gewonnen.", "Spiel beendet", JOptionPane.INFORMATION_MESSAGE);
                 break;
             case SearchOnlineGames:
-                System.out.println("printgameoffers");
+                yourColor.setText("Sie sind Farbe: " + game.getMyColor().toString());
                 printGameOffers();
                 break;
         }
